@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewUserDonation</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table border="1" align="center">
+            <tr>
+                <td>SI.NO</td>
+                <td>User Name</td>
+                <td>Photo</td>
+                <td>Email</td>
+                <td>Contact</td>
+                <td>Amount</td>
+                <td>Date</td>
+            </tr>
+            {% for i in paymentdata %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.user_id.user_name }}</td>
+                <td>{{ i.user_id.user_photo }}</td>
+                <td>{{ i.user_id.user_email }}</td>
+                <td>{{ i.user_id.user_contact }}</td>
+                <td>{{ i.payment_amount }}</td>
+                <td>{{ i.payment_date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+</html>

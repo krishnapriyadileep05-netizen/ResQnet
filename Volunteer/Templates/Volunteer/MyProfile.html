@@ -1,0 +1,105 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 60%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        th, td {
+            border: 1px solid #cfd4dc;
+            padding: 12px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+        }
+
+        td[colspan="2"] {
+            text-align: center;
+        }
+
+        img {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>My Profile</h2>
+
+        <table>
+            <tr>
+                <td colspan="2">
+                    <img src="{{ vdata.volunteer_photo.url }}" width="100" height="100" alt="volunteer">
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ vdata.volunteer_name }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ vdata.volunteer_email }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ vdata.volunteer_address }}</td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+                <td>{{ vdata.volunteer_contact }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="{% url 'Volunteer:EditProfile' %}">Edit Profile</a> /
+                    <a href="{% url 'Volunteer:ChangePassword' %}">Change Password</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+
+{% endblock %}

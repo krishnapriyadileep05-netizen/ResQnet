@@ -1,0 +1,96 @@
+{% extends 'Admin/Header.html' %}
+{% block content %}
+
+<style>
+.summary-section {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.summary-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 250px;
+}
+
+.summary-card h4 {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.summary-card h2 {
+    color: #28a745;
+}
+
+.donation-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.donation-card {
+    background: #ffffff;
+    width: 280px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.donation-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+}
+</style>
+
+<h2 align="center">Donation Report</h2>
+
+<!-- Summary Section -->
+<div class="summary-section">
+    <div class="summary-card">
+        <h4>Total Donation</h4>
+        <h2>₹ {{ total_amount }}</h2>
+    </div>
+
+    <div class="summary-card">
+        <h4>Today's Collection</h4>
+        <h2>₹ {{ today_amount }}</h2>
+    </div>
+</div>
+
+<!-- Donation Cards -->
+<div class="donation-container">
+    {% for i in paymentdata %}
+    <div class="donation-card">
+        
+        {% if i.user_id.user_photo %}
+            <img src="{{ i.user_id.user_photo.url }}">
+        {% else %}
+            <img src="https://via.placeholder.com/80">
+        {% endif %}
+        
+        <h4>{{ i.user_id.user_name }}</h4>
+        <p class="amount">₹ {{ i.payment_amount }}</p>
+        <small>{{ i.payment_date }}</small>
+    </div>
+    {% empty %}
+        <p>No Donations Found</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'Admin/Header.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            text-align: center;
+        }
+
+        table {
+            width: 95%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        th, td {
+            border: 1px solid #cfd4dc;
+            padding: 12px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4a6fa5;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+        }
+
+        img {
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+<h2>Volunteer Verification</h2>
+<table>
+    <tr>
+        <th>SI.NO</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Photo</th>
+        <th>Proof</th>
+        <th>Address</th>
+        <th>Contact</th>
+        <th>District</th>
+        <th>Place</th>
+        <th>Emergency</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in pending %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.volunteer_name }}</td>
+        <td>{{ i.volunteer_email }}</td>
+        <td><img src="{{ i.volunteer_photo.url }}" width="100" height="100"></td>
+        <td><img src="{{ i.volunteer_proof.url }}" width="100" height="100"></td>
+        <td>{{ i.volunteer_address }}</td>
+        <td>{{ i.volunteer_contact }}</td>
+        <td>{{ i.place.district.district_name }}</td>
+        <td>{{ i.place.place_name }}</td>
+        <td>
+            {% if i.volunteer_emergency == 1 %}
+                Ready For Join Emergency Situations
+            {% else %}
+                Not Ready
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'Admin:acceptlist' i.id %}">Accept</a> /
+            <a href="{% url 'Admin:rejectlist' i.id %}">Reject</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Accepted List</h2>
+<table>
+    <tr>
+        <th>SI.NO</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Photo</th>
+        <th>Proof</th>
+        <th>Address</th>
+        <th>Contact</th>
+        <th>District</th>
+        <th>Place</th>
+        <th>Emergency</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in accept %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.volunteer_name }}</td>
+        <td>{{ i.volunteer_email }}</td>
+        <td><img src="{{ i.volunteer_photo.url }}" width="100" height="100"></td>
+        <td><img src="{{ i.volunteer_proof.url }}" width="100" height="100"></td>
+        <td>{{ i.volunteer_address }}</td>
+        <td>{{ i.volunteer_contact }}</td>
+        <td>{{ i.place.district.district_name }}</td>
+        <td>{{ i.place.place_name }}</td>
+        <td>
+            {% if i.volunteer_emergency == 1 %}
+                Ready For Join Emergency Situations
+            {% else %}
+                Not Ready
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'Admin:rejectlist' i.id %}">Reject</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Rejected List</h2>
+<table>
+    <tr>
+        <th>SI.NO</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Photo</th>
+        <th>Proof</th>
+        <th>Address</th>
+        <th>Contact</th>
+        <th>District</th>
+        <th>Place</th>
+        <th>Emergency</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in reject %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.volunteer_name }}</td>
+        <td>{{ i.volunteer_email }}</td>
+        <td><img src="{{ i.volunteer_photo.url }}" width="100" height="100"></td>
+        <td><img src="{{ i.volunteer_proof.url }}" width="100" height="100"></td>
+        <td>{{ i.volunteer_address }}</td>
+        <td>{{ i.volunteer_contact }}</td>
+        <td>{{ i.place.district.district_name }}</td>
+        <td>{{ i.place.place_name }}</td>
+        <td>
+            {% if i.volunteer_emergency == 1 %}
+                Ready For Join Emergency Situations
+            {% else %}
+                Not Ready
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'Admin:acceptlist' i.id %}">Accept</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</form>
+</body>
+</html>
+{% endblock %}

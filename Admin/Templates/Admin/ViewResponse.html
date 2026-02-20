@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Response</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: rgb(15, 59, 117);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 95%;
+            margin: 30px auto;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: rgb(15, 59, 117);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e6f0ff;
+        }
+
+        a {
+            text-decoration: none;
+            color: rgb(15, 59, 117);
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #ff6600;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+    </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Response List</h2>
+
+<table border="1" align="center">
+    <tr>
+        <th>SI.NO</th>
+        <th>Request Type</th>
+        <th>District</th>
+        <th>Place</th>
+        <th>Volunteer Name</th>
+        <th>Volunteer Contact</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in responsedata %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.request_id.request_title }}</td>
+        <td>{{ i.request_id.place_id.district.district_name }}</td>
+        <td>{{ i.request_id.place_id.place_name }}</td>
+        <td>{{ i.volunteer_id.volunteer_name }}</td>
+        <td>{{ i.volunteer_id.volunteer_contact }}</td>
+        <td>{{ i.response_date }}</td>
+        <td>
+            {% if i.response_status == 1 %}
+                Accepted
+            {% elif i.response_status == 2 %}
+                On Going
+            {% elif i.response_status == 3 %}
+                Completed
+            {% else %}
+                N/A
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'Admin:ViewMembers' i.id %}">View Members</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="9" align="center">No Responses Found</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends 'User/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        table {
+            width: 45%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        td {
+            border: 1px solid #cfd4dc;   /* row + column lines */
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        td:first-child {
+            width: 30%;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #cfd4dc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 22px;
+            border: none;
+            border-radius: 6px;
+            background-color: #e39c7d;
+            color: #1f2937;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #d88968;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h2 style="text-align: center;">Feedbacks</h2>
+
+        <table>
+            <tr>
+                <td>Content</td>
+                <td>
+                    <input type="text" name="txt_content" id="txt_content">
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+{% if msg %}
+<script>
+    alert("{{msg}}")
+</script>
+{% endif %}
+</html>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Items</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 15px auto;
+            background: white;
+        }
+
+        /* First table smaller */
+        table:first-of-type {
+            width: 35%;
+        }
+
+        /* Second table normal */
+        table:last-of-type {
+            width: 60%;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: rgb(15, 59, 117);
+            color: white;
+        }
+
+        /* 🔹 Vertical column lines ONLY for 2nd table */
+        table:last-of-type th,
+        table:last-of-type td {
+            border-right: 1px solid #ddd;
+        }
+
+        table:last-of-type th:last-child,
+        table:last-of-type td:last-child {
+            border-right: none;
+        }
+
+        /* Optional: light horizontal lines for 2nd table */
+        table:last-of-type tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        input[type="text"] {
+            padding: 6px;
+            width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            padding: 6px 16px;
+            background-color: rgb(15, 59, 117);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: rgb(15, 59, 117);
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+<form action="" method="post">
+    {% csrf_token %} 
+
+    <h2>Add Items</h2>
+
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" name="txt_name" id="txt_name"></td>
+        </tr>
+        <tr>
+            <td>Count</td>
+            <td><input type="text" name="txt_count" id="txt_count"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Submit">
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <th>SI.NO</th>
+            <th>Name</th>
+            <th>Count</th>
+            <th>Action</th>
+        </tr>
+
+        {% for i in itemdata %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.donationitems_name }}</td>
+            <td>{{ i.donationitems_count }}</td>
+            <td>
+                <a href="{% url 'Admin:delitem' i.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</form>
+</body>
+
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location="{% url 'Admin:AddItem' id %}"
+</script>
+{% endif %}
+
+</html>

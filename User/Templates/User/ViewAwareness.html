@@ -1,0 +1,151 @@
+{% extends 'User/Header.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .awareness-container {
+        padding: 30px;
+        background-color: #f3eadaa1;
+        min-height: 100vh;
+    }
+
+    .awareness-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .awareness-header h2 {
+        color: #1f2937;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .awareness-header p {
+        color: #6b7280;
+        font-size: 16px;
+    }
+
+    .awareness-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .awareness-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .awareness-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .awareness-content {
+        padding: 25px;
+    }
+
+    .awareness-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 15px;
+    }
+
+    .awareness-description {
+        color: #4b5563;
+        font-size: 16px;
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .awareness-date {
+        color: #9ca3af;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .no-awareness {
+        text-align: center;
+        padding: 60px 20px;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .no-awareness-icon {
+        font-size: 64px;
+        color: #d1d5db;
+        margin-bottom: 20px;
+    }
+
+    .no-awareness h3 {
+        color: #6b7280;
+        margin-bottom: 10px;
+    }
+
+    .no-awareness p {
+        color: #9ca3af;
+    }
+</style>
+
+<div class="awareness-container">
+    <div class="awareness-header">
+        <h2>📢 Disaster Awareness & Safety Tips</h2>
+        <p>Stay informed and prepared with important safety information</p>
+    </div>
+
+    <div class="container">
+        {% if awareness %}
+        <div class="row">
+            {% for item in awareness %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="awareness-card">
+                    {% if item.awareness_image %}
+
+                    {% if ".mp4" in item.awareness_image.url|lower or ".webm" in item.awareness_image.url|lower or ".ogg" in item.awareness_image.url|lower %}
+
+                    <video class="awareness-image" controls>
+                        <source src="{{ item.awareness_image.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+                    {% else %}
+
+                    <img src="{{ item.awareness_image.url }}" alt="{{ item.awareness_title }}" class="awareness-image">
+
+                    {% endif %}
+
+                    {% endif %}
+
+                    <div class="awareness-content">
+                        <h3 class="awareness-title">{{ item.awareness_title }}</h3>
+                        <p class="awareness-description">{{ item.awareness_description }}</p>
+                        <div class="awareness-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>{{ item.awareness_date|date:"F d, Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-awareness">
+            <div class="no-awareness-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <h3>No Awareness Content Available</h3>
+            <p>Check back later for important safety information and disaster awareness tips.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

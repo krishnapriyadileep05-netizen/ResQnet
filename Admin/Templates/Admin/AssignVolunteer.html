@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssignVolunteer</title>
+</head>
+<body><form action="" method="post">
+   <table border="1" align="center">
+    <tr>
+        <td>SI.NO</td>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Contact</td>
+        <td>Photo</td>
+        <td>Emergency Status</td>
+        <td>Action</td>
+    </tr>
+        {% for i in volunteerdata %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.volunteer_name }}</td>
+        <td>{{ i.volunteer_email }}</td>
+        <td>{{ i.volunteer_contact }}</td>
+        <td>{{ i.volunteer_photo }}</td>
+        <td>{{ i.volunteer_emergency }}</td>
+        <td><a href="{% url 'Admin:Assign' i.id %}">Assign</td>
+        
+    </tr>
+    {%  endfor %}
+   </table> 
+
+   <table border="1" align="center">
+    
+
+   </table>
+   </form>
+</body>
+</html>

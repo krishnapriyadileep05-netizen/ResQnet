@@ -1,0 +1,96 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewDonationRequest</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        table, td {
+            border: 1px solid #cfd4dc; /* row + column lines */
+        }
+
+        td {
+            padding: 12px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        tr:first-child td {
+            background-color: #e39c7d;
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h2 style="text-align: center;">Donation Request</h2>
+
+        <table align="center">
+            <tr>
+                <td>SI.NO</td>
+                <td>District</td>
+                <td>Place</td>
+                <td>Details</td>
+                <td>Action</td>
+            </tr>
+
+            {% for i in requestdata %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.place_id.district.district_name }}</td>
+                <td>{{ i.place_id.place_name }}</td>
+                <td>{{ i.donationrequest_details }}</td>
+                <td>
+                    <a href="{% url 'Volunteer:ViewItem' i.id %}">View Items</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'User/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #1f2937;
+        }
+
+        table {
+            width: 50%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        table, td {
+            border: none;
+        }
+
+        td {
+            padding: 14px;
+            font-size: 14px;
+            color: #374151;
+            border-bottom: 1px solid #b3b6bd;  /* row lines */
+            border-right: 1px solid #b3b6bd;   /* column lines */
+        }
+
+        /* remove last column line */
+        td:last-child {
+            border-right: none;
+        }
+
+        /* remove last row line */
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+            margin-left: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #e39c7d;
+            color: #1f2937;
+            border: none;
+            padding: 8px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #d4886b;
+        }
+    </style>
+</head>
+
+<body>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <h2 style="text-align: center;">Donation Box</h2>
+
+    <table align="center">
+        <tr>
+            <td>Type</td>
+            <td>
+                <input type="radio" name="txt_type" value="Money"> Money
+                <input type="radio" name="txt_type" value="Material"> Material
+            </td>
+        </tr>
+
+        <tr>
+            <td>Remark</td>
+            <td>
+                <input type="text" name="txt_remark" id="txt_remark">
+            </td>
+        </tr>
+
+        <tr>
+            <td>Quantity / Amount</td>
+            <td>
+                <input type="text" name="txt_amount" id="txt_amount">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="Submit">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'User:ViewDonationRequest' %}";
+</script>
+{% endif %}
+
+</body>
+</html>
+
+{% endblock %}

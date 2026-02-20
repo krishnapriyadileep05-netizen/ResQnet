@@ -1,0 +1,1202 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+</head>
+<body>
+    <a href="{% url 'Volunteer:MyProfile'  %}">My Profile</a>
+    <br> <a href="{% url 'Volunteer:ViewRequest'  %}">View Request</a>
+    <br> <a href="{% url 'Volunteer:Team'  %}">Team Details</a>
+    <br> <a href="{% url 'Volunteer:ViewDonationRequest'  %}">View Donation Request</a>
+    <br> <a href="{% url 'Volunteer:ViewMyTask'  %}">View My Task</a>
+    <br> <a href="{% url 'Volunteer:Complaint'  %}">Complaint</a>
+    <br> <a href="{% url 'Volunteer:VolunteerCollectionRequest'  %}">VolunteerCollectionRequest</a>
+    <br> <a href="{% url 'Volunteer:MyCollectionRequest'  %}">MyCollectionRequest</a>
+
+
+    <br> <a href="{% url 'Volunteer:logout'  %}">Logout</a>
+
+    
+</body>
+</html> -->
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>RescueNet - Volunteer Dashboard</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600&family=Roboto&display=swap" rel="stylesheet"> 
+
+        <!-- Icon Font Stylesheet -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="{% static 'Main/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+        <link href="{% static 'Main/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="{% static 'Main/css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="{% static 'Main/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <!-- Spinner Start -->
+        <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+            <div class="spinner-grow text-primary" role="status"></div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Navbar start -->
+        <div class="container-fluid fixed-top px-0">
+            <div class="container px-0">
+                <div class="topbar">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-8">
+                            <div class="topbar-info d-flex flex-wrap">
+                                <a href="#" class="text-light me-4"><i class="fas fa-envelope text-white me-2"></i>rescuenet@gmail.com</a>
+                                <a href="#" class="text-light"><i class="fas fa-phone-alt text-white me-2"></i>+01234567890</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topbar-icon d-flex align-items-center justify-content-end">
+                                <a href="#" class="btn-square text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="btn-square text-white me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="btn-square text-white me-2"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="btn-square text-white me-2"><i class="fab fa-pinterest"></i></a>
+                                <a href="#" class="btn-square text-white me-0"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <nav class="navbar navbar-light bg-light navbar-expand-xl">
+                    <a href="{% url 'Volunteer:HomePage' %}" class="navbar-brand ms-3">
+                        <h1 class="text-primary display-5">RescueNet</h1>
+                    </a>
+                    <button class="navbar-toggler py-2 px-3 me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse bg-light" id="navbarCollapse">
+                        <div class="navbar-nav ms-auto">
+                            <a href="{% url 'Volunteer:HomePage' %}" class="nav-item nav-link active">Home</a>
+                            <!-- <a href="{% url 'Volunteer:ViewRequest' %}" class="nav-item nav-link">View Request</a>
+                            <a href="{% url 'Volunteer:VolunteerCollectionRequest' %}" class="nav-item nav-link">ViewCollection Request</a> -->
+                            <!-- <a href="causes.html" class="nav-item nav-link">Causes</a>
+                            <a href="events.html" class="nav-item nav-link">Events</a> -->
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Request</a>
+                                <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                    <a href="{% url 'Volunteer:ViewRequest' %}" class="dropdown-item">View User Request</a>
+                                    <a href="{% url 'Volunteer:ViewDonationRequest' %}" class="dropdown-item">View Donation Request</a>
+                                    <a href="{% url 'Volunteer:VolunteerCollectionRequest' %}" class="dropdown-item">View Collection Request</a>
+                                    <a href="{% url 'Volunteer:MyCollectionRequest' %}" class="dropdown-item">My Collection Request</a>
+                                    <a href="{% url 'Volunteer:ViewMyTask' %}" class="dropdown-item">My Task</a>
+                                    <!-- <a href="donation.html" class="dropdown-item">Donation</a>
+                                    <a href="404.html" class="dropdown-item">404 Error</a> -->
+                                </div>
+                            </div>
+                            <a href="{% url 'Volunteer:MyProfile' %}" class="nav-item nav-link">My Profile</a>
+                            <a href="{% url 'Volunteer:Complaint' %}" class="nav-item nav-link">Complaint</a>
+                        </div>
+                        <div class="d-flex align-items-center flex-nowrap pt-xl-0" style="margin-left: 15px;">
+                            <a href="{% url 'Volunteer:ViewDonationRequest' %}" class="btn-hover-bg btn btn-primary text-white py-2 px-4 me-3">Donation Box</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Navbar End -->
+
+        
+       <!-- Carousel Start -->
+        <div class="container-fluid carousel-header vh-100 px-0">
+            <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselId" data-bs-slide-to="0" class="active"></li>
+                    <li data-bs-target="#carouselId" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#carouselId" data-bs-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <img src="{% static 'Main/img/carousel-1.jpg' %}" class="img-fluid" alt="Image">
+                        <div class="carousel-caption">
+                            <div class="p-3" style="max-width: 900px;">
+                                <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">
+                                    Rapid Response & Reliable Support
+                                </h4>
+                                <h1 class="display-1 text-capitalize text-white mb-4">
+                                    RescueNet
+                                </h1>
+                                <p class="mb-5 fs-5">
+                                    RescueNet is a disaster management system designed to report emergencies, coordinate rescue operations, and ensure timely assistance during critical situations.
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-3 px-5" href="{% url 'Volunteer:ViewRequest' %}">View User Requests</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'Main/img/img6.png' %}" class="img-fluid" alt="Image">
+                        <div class="carousel-caption">
+                            <div class="p-3" style="max-width: 900px;">
+                               <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">
+                                Rapid Response • Reliable Support
+                                    </h4>
+                                    <h1 class="display-1 text-capitalize text-white mb-4">
+                                        RescueNet
+                                    </h1>
+                                    <p class="mb-5 fs-5">
+                                        RescueNet is a disaster management system designed to report emergencies, coordinate rescue operations, and ensure timely assistance during critical situations.
+                                    </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-3 px-5" href="{% url 'Volunteer:ViewRequest' %}">View User Requests</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'Main/img/img7.png' %}" class="img-fluid" alt="Image">
+                        <div class="carousel-caption">
+                            <div class="p-3" style="max-width: 900px;">
+                                <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">
+                                    Rapid Response • Reliable Support
+                                </h4>
+                                <h1 class="display-1 text-capitalize text-white mb-4">
+                                    RescueNet
+                                </h1>
+                                <p class="mb-5 fs-5">
+                                    RescueNet is a disaster management system designed to report emergencies, coordinate rescue operations, and ensure timely assistance during critical situations.
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-3 px-5" href="{% url 'Volunteer:ViewRequest' %}">View User Requests</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <!-- Carousel End -->
+
+
+
+
+
+        <!-- About Start
+        <div class="container-fluid about  py-5">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-xl-5">
+                        <div class="h-100">
+                            <img src="img/about-1.jpg" class="img-fluid w-100 h-100" alt="Image">
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-xl-7">
+                       <h5 class="text-uppercase text-primary">About Us</h5>
+                    <h1 class="mb-4">Our mission is to save lives during disasters</h1>
+                    <p class="fs-5 mb-4">
+                        RescueNet is a disaster management system focused on reporting emergencies, coordinating rescue operations, and connecting volunteers with authorities to ensure fast and effective disaster response.
+                    </p>
+                        <div class="tab-class bg-secondary p-4">
+                            <ul class="nav d-flex mb-2">
+                                <li class="nav-item mb-3">
+                                    <a class="d-flex py-2 text-center bg-white active" data-bs-toggle="pill" href="#tab-1">
+                                        <span class="text-dark" style="width: 150px;">About</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item mb-3">
+                                    <a class="d-flex py-2 mx-3 text-center bg-white" data-bs-toggle="pill" href="#tab-2">
+                                        <span class="text-dark" style="width: 150px;">Mission</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item mb-3">
+                                    <a class="d-flex py-2 text-center bg-white" data-bs-toggle="pill" href="#tab-3">
+                                        <span class="text-dark" style="width: 150px;">Vision</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab-1" class="tab-pane fade show p-0 active">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-flex">
+                                                <div class="text-start my-auto">
+                                                    <h5 class="text-uppercase mb-3">Lorem Ipsum 1</h5>
+                                                    <p class="mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+                                                    </p>
+                                                    <div class="d-flex align-items-center justify-content-start">
+                                                        <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab-2" class="tab-pane fade show p-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-flex">
+                                                <div class="text-start my-auto">
+                                                    <h5 class="text-uppercase mb-3">Lorem Ipsum 2</h5>
+                                                    <p class="mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+                                                    </p>
+                                                    <div class="d-flex align-items-center justify-content-start">
+                                                        <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab-3" class="tab-pane fade show p-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="d-flex">
+                                                <div class="text-start my-auto">
+                                                    <h5 class="text-uppercase mb-3">Lorem Ipsum 3</h5>
+                                                    <p class="mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+                                                    </p>
+                                                    <div class="d-flex align-items-center justify-content-start">
+                                                        <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        About End -->
+
+
+        <!-- Services Start -->
+        <div class="container-fluid service py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5" style="max-width: 800px;">
+            <h5 class="text-uppercase text-primary">What We Do</h5>
+            <h1 class="mb-0">What RescueNet Does</h1>
+        </div>
+
+        <style>
+            .service-item {
+                height: 350px;
+                overflow: hidden;
+                border-radius: 8px;
+            }
+
+            .service-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+        </style>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="service-item">
+                    <img src="{% static 'Main/img/img2.jpg' %}" class="img-fluid w-100" alt="Emergency Reporting">
+                    <div class="service-link">
+                        <a href="#" class="h4 mb-0">Emergency Reporting</a>
+                    </div>
+                </div>
+                <p class="my-4">
+                    RescueNet allows users to quickly report disaster situations and emergencies for immediate action.
+                </p>
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="service-item">
+                    <img src="{% static 'Main/img/img8.jpeg' %}" class="img-fluid w-100" alt="Rescue Coordination">
+                    <div class="service-link">
+                        <a href="#" class="h4 mb-0">Rescue Coordination</a>
+                    </div>
+                </div>
+                <p class="my-4">
+                    The system helps authorities and volunteers coordinate rescue operations efficiently during disasters.
+                </p>
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="service-item">
+                    <img src="{% static 'Main/img/service-3.jpg' %}" class="img-fluid w-100" alt="Volunteer Management">
+                    <div class="service-link">
+                        <a href="#" class="h4 mb-0">Volunteer Management</a>
+                    </div>
+                </div>
+                <p class="my-4">
+                    RescueNet manages volunteer registrations and assignments to ensure timely help reaches affected areas.
+                </p>
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="service-item">
+                    <img src="{% static 'Main/img/img13.jpeg' %}" class="img-fluid w-100" alt="Disaster Alerts">
+                    <div class="service-link">
+                        <a href="#" class="h4 mb-0">Disaster Alerts</a>
+                    </div>
+                </div>
+                <p class="my-4">
+                    Provides real-time alerts and updates to keep people informed and prepared during disasters.
+                </p>
+            </div>
+
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-center">
+                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">
+                        Read More
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+        <!-- Donation Start -->
+        <!-- <div class="container-fluid donation py-5">
+            <div class="container py-5">
+                <div class="text-center mx-auto pb-5" style="max-width: 800px;">
+                    <h5 class="text-uppercase text-primary">Donation</h5>
+                    <h1 class="mb-0">Your money will save our life</h1>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="donation-item">
+                            <img src="img/donation-1.jpg" class="img-fluid w-100" alt="Image">
+                            <div class="donation-content d-flex flex-column">
+                                <h5 class="text-uppercase text-primary mb-4">Organic</h5>
+                                <a href="#" class="btn-hover-color display-6 text-white">Help Us More</a>
+                                <h4 class="text-white mb-4">Protect Environments</h4>
+                                <p class="text-white mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                <div class="donation-btn d-flex align-items-center justify-content-start">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Donate !</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="donation-item">
+                            <img src="img/service-2.jpg" class="img-fluid w-100" alt="Image">
+                            <div class="donation-content d-flex flex-column">
+                                <h5 class="text-uppercase text-primary mb-4">Ecosystem</h5>
+                                <a href="#" class="btn-hover-color display-6 text-white">Help Us More</a>
+                                <h4 class="text-white mb-4">Protect Environments</h4>
+                                <p class="text-white mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                <div class="donation-btn d-flex align-items-center justify-content-start">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Donate !</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="donation-item">
+                            <img src="img/donation-3.jpg" class="img-fluid w-100" alt="Image">
+                            <div class="donation-content d-flex flex-column">
+                                <h5 class="text-uppercase text-primary mb-4">Recycling</h5>
+                                <a href="#" class="btn-hover-color display-6 text-white">Help Us More</a>
+                                <h4 class="text-white mb-4">Protect Environments</h4>
+                                <p class="text-white mb-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                <div class="donation-btn d-flex align-items-center justify-content-start">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Donate !</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">All Donation</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- Donation End -->
+
+
+        <!-- Counter Start -->
+         <br>
+         <br>
+       <div class="container-fluid counter py-5" style="background: linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, 0.4)), url('{% static 'Main/img/volunteers-bg.jpg' %}') center center; background-size: cover;">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5" style="max-width: 800px;">
+            <h5 class="text-uppercase text-primary"> Achievements</h5>
+            <p class="text-white mb-0">
+                RescueNet is a disaster management platform that helps coordinate rescue operations, track volunteers, and deliver relief in real time.
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="counter-item text-center border p-5">
+                    <i class="fas fa-thumbs-up fa-4x text-white"></i>
+                    <h3 class="text-white my-4">People Rescued</h3>
+                    <div class="counter-counting">
+                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">3600</span>
+                        <span class="h1 fw-bold text-primary">+</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="counter-item text-center border p-5">
+                    <i class="fas fa-file-invoice-dollar fa-4x text-white"></i>
+                    <h3 class="text-white my-4">Relief Funds Collected</h3>
+                    <div class="counter-counting text-center border-white w-100" style="border-style: dotted; font-size: 30px;">
+                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">513</span>
+                        <span class="h1 fw-bold text-primary">$</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="counter-item text-center border p-5">
+                    <i class="fas fa-user fa-4x text-white"></i>
+                    <h3 class="text-white my-4">Active Volunteers</h3>
+                    <div class="counter-counting text-center border-white w-100" style="border-style: dotted; font-size: 30px;">
+                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">713</span>
+                        <span class="h1 fw-bold text-primary">+</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="counter-item text-center border p-5">
+                    <i class="fas fa-heart fa-4x text-white"></i>
+                    <h3 class="text-white my-4">Emergency Response Days</h3>
+                    <div class="counter-counting text-center border-white w-100" style="border-style: dotted; font-size: 30px;">
+                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">487</span>
+                        <span class="h1 fw-bold text-primary">+</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-center">
+                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="{% url 'Volunteer:ViewMyTask' %}">View My Tasks</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- Counter End -->
+
+
+        <!-- Causes Start -->
+        <!-- <div class="container-fluid causes py-5">
+            <div class="container py-5">
+                <div class="text-center mx-auto pb-5" style="max-width: 800px;">
+                    <h5 class="text-uppercase text-primary">Recent Causes</h5>
+                    <h1 class="mb-4">The environment needs our protection</h1>
+                    <p class="mb-0">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
+                    </p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-6 col-xl-3">
+                        <div class="causes-item">
+                            <div class="causes-img">
+                                <img src="img/causes-4.jpg" class="img-fluid w-100" alt="Image">
+                                <div class="causes-link pb-2 px-3">
+                                    <small class="text-white"><i class="fas fa-chart-bar text-primary me-2"></i>Goal: $3600</small>
+                                    <small class="text-white"><i class="fa fa-thumbs-up text-primary me-2"></i>Raised: $4000</small>
+                                </div>
+                                <div class="causes-dination p-2">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-3" href="#">Donate Now</a>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                                    <span>65%</span>
+                                </div>
+                            </div>
+                            <div class="causes-content p-4">
+                                <h4 class="mb-3">First environments activity of</h4>
+                                <p class="mb-4">Help today because tomorrow you may be the one who needs more helping!</p>
+                                <a class="btn-hover-bg btn btn-primary text-white py-2 px-3" href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-3">
+                        <div class="causes-item">
+                            <div class="causes-img">
+                                <img src="img/causes-2.jpg" class="img-fluid w-100" alt="Image">
+                                <div class="causes-link pb-2 px-3">
+                                    <small class="text-white"><i class="fas fa-chart-bar text-primary me-2"></i>Goal: $3600</small>
+                                    <small class="text-white"><i class="fa fa-thumbs-up text-primary me-2"></i>Raised: $4000</small>
+                                </div>
+                                <div class="causes-dination p-2">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-3" href="#">Donate Now</a>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                    <span>75%</span>
+                                </div>
+                            </div>
+                            <div class="causes-content p-4">
+                                <h4 class="mb-3">Build school for poor children.</h4>
+                                <p class="mb-4">Help today because tomorrow you may be the one who needs more helping!</p>
+                                <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-3">
+                        <div class="causes-item">
+                            <div class="causes-img">
+                                <img src="img/causes-3.jpg" class="img-fluid w-100" alt="Image">
+                                <div class="causes-link pb-2 px-3">
+                                    <small class="text-white"><i class="fas fa-chart-bar text-primary me-2"></i>Goal: $3600</small>
+                                    <small class="text-white"><i class="fa fa-thumbs-up text-primary me-2"></i>Raised: $4000</small>
+                                </div>
+                                <div class="causes-dination p-2">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-3" href="#">Donate Now</a>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                                    <span>85%</span>
+                                </div>
+                            </div>
+                            <div class="causes-content p-4">
+                                <h4 class="mb-3">Building clean-water system for rural poor.</h4>
+                                <p class="mb-4">Help today because tomorrow you may be the one who needs more helping!</p>
+                                <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-3">
+                        <div class="causes-item">
+                            <div class="causes-img">
+                                <img src="img/causes-1.jpg" class="img-fluid w-100" alt="Image">
+                                <div class="causes-link pb-2 px-3">
+                                    <small class="text-white"><i class="fas fa-chart-bar text-primary me-2"></i>Goal: $3600</small>
+                                    <small class="text-white"><i class="fa fa-thumbs-up text-primary me-2"></i>Raised: $4000</small>
+                                </div>
+                                <div class="causes-dination p-2">
+                                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-3" href="#">Donate Now</a>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">
+                                    <span>95%</span>
+                                </div>
+                            </div>
+                            <div class="causes-content p-4">
+                                <h4 class="mb-3">First environments activity of this summer.</h4>
+                                <p class="mb-4">Help today because tomorrow you may be the one who needs more helping!</p>
+                                <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        Causes End
+
+
+        Events Start
+        <div class="container-fluid event py-5">
+            <div class="container py-5">
+                <div class="text-center mx-auto mb-5" style="max-width: 800px;">
+                    <h5 class="text-uppercase text-primary">Upcoming Events</h5>
+                    <h1 class="mb-0">Help today because tomorrow you may be the one who needs more helping!</h1>
+                </div>
+                <div class="event-carousel owl-carousel">
+                    <div class="event-item">
+                        <img src="img/events-1.jpg" class="img-fluid w-100" alt="Image">
+                        <div class="event-content p-4">
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="text-body"><i class="fas fa-map-marker-alt me-2"></i>Grand Mahal, Dubai 2100.</span>
+                                <span class="text-body"><i class="fas fa-calendar-alt me-2"></i>10 Feb, 2023</span>
+                            </div>
+                            <h4 class="mb-4">How To Build A Cleaning Plan</h4>
+                            <p class="mb-4">Lorem ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor.</p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <img src="img/events-2.jpg" class="img-fluid w-100" alt="Image">
+                        <div class="event-content p-4">
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="text-body"><i class="fas fa-map-marker-alt me-2"></i>Grand Mahal, Dubai 2100.</span>
+                                <span class="text-body"><i class="fas fa-calendar-alt me-2"></i>10 Feb, 2023</span>
+                            </div>
+                            <h4 class="mb-4">How To Build A Cleaning Plan</h4>
+                            <p class="mb-4">Lorem ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor.</p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <img src="img/events-3.jpg" class="img-fluid w-100" alt="Image">
+                        <div class="event-content p-4">
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="text-body"><i class="fas fa-map-marker-alt me-2"></i>Grand Mahal, Dubai 2100.</span>
+                                <span class="text-body"><i class="fas fa-calendar-alt me-2"></i>10 Feb, 2023</span>
+                            </div>
+                            <h4 class="mb-4">How To Build A Cleaning Plan</h4>
+                            <p class="mb-4">Lorem ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor.</p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <img src="img/events-4.jpg" class="img-fluid w-100" alt="Image">
+                        <div class="event-content p-4">
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="text-body"><i class="fas fa-map-marker-alt me-2"></i>Grand Mahal, Dubai 2100.</span>
+                                <span class="text-body"><i class="fas fa-calendar-alt me-2"></i>10 Feb, 2023</span>
+                            </div>
+                            <h4 class="mb-4">How To Build A Cleaning Plan</h4>
+                            <p class="mb-4">Lorem ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor.</p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        Events End -->
+
+        <!-- Blog Start -->
+       <div class="container my-5">
+       <style>
+    .blog-content {
+        border-color: rgba(237, 239, 243, 0.618) !important;
+        box-shadow: 0 0 12px rgba(42, 40, 40, 0.2);
+    }
+</style>
+   <div class="border border-secondary rounded-4 p-4 shadow">
+    <div class="container-fluid blog py-5 mb-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5" style="max-width: 800px;">
+                <h5 class="text-uppercase text-primary">Latest Updates</h5>
+                <h1 class="mb-0">
+                    Help today because tomorrow you may be the one who needs more helping!
+                </h1>
+            </div>
+
+            <div class="row g-4">
+
+                <!-- Donation -->
+                <div class="col-lg-6 col-xl-3">
+                    <div class="blog-item h-100">
+                        <div class="blog-img">
+                            <img src="{% static 'Main/img/blog-1.jpg' %}" class="img-fluid w-100" alt="">
+                            <div class="blog-info">
+                                <div class="d-flex">
+                                    <span class="me-3 like-btn" data-like="3">
+                                        3 <i class="fa fa-heart"></i>
+                                    </span>
+                                    <a href="#" class="text-white">
+                                        0 <i class="fa fa-comment"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-dark border p-4 blog-content">
+                            <h4 class="mb-3">Donate for Relief</h4>
+                            <p class="mb-4">
+                                Your kindness rebuilds lives. One donation can change many futures.
+                            </p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Volunteer -->
+                <div class="col-lg-6 col-xl-3">
+                    <div class="blog-item h-100">
+                        <div class="blog-img">
+                            <img src="{% static 'Main/img/blog-2.jpg' %}" class="img-fluid w-100" alt="">
+                            <div class="blog-info">
+                                <div class="d-flex">
+                                    <span class="me-3 like-btn" data-like="3">
+                                        3 <i class="fa fa-heart"></i>
+                                    </span>
+                                    <a href="#" class="text-white">
+                                        0 <i class="fa fa-comment"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-dark border p-4 blog-content">
+                            <h4 class="mb-3">Become a Volunteer</h4>
+                            <p class="mb-4">
+                                When people feel lost, your presence matters.
+                                Become the reason someone survives.
+                            </p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert -->
+                <div class="col-lg-6 col-xl-3">
+                    <div class="blog-item h-100">
+                        <div class="blog-img">
+                            <img src="{% static 'Main/img/blog-3.jpg' %}" class="img-fluid w-100" alt="">
+                            <div class="blog-info">
+                                <div class="d-flex">
+                                    <span class="me-3 like-btn" data-like="3">
+                                        3 <i class="fa fa-heart"></i>
+                                    </span>
+                                    <a href="#" class="text-white">
+                                        0 <i class="fa fa-comment"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-dark border p-4 blog-content">
+                            <h4 class="mb-3">Instant Alert System</h4>
+                            <p class="mb-4">
+                                Report emergencies in one tap.
+                                Help reaches the right people fast.
+                            </p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guide -->
+                <div class="col-lg-6 col-xl-3">
+                    <div class="blog-item h-100">
+                        <div class="blog-img">
+                            <img src="{% static 'Main/img/blog-4.jpg' %}" class="img-fluid w-100" alt="">
+                            <div class="blog-info">
+                                <div class="d-flex">
+                                    <span class="me-3 like-btn" data-like="3">
+                                        3 <i class="fa fa-heart"></i>
+                                    </span>
+                                    <a href="#" class="text-white">
+                                        0 <i class="fa fa-comment"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-dark border p-4 blog-content">
+                            <h4 class="mb-3">Emergency Guide</h4>
+                            <p class="mb-4">
+                                Clear steps to follow during critical situations.
+                                Stay calm. Act right. Stay safe.
+                            </p>
+                            <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+
+        // if already liked, do nothing
+        if (btn.getAttribute('data-liked') === "1") return;
+
+        // increase only once
+        let count = parseInt(this.getAttribute('data-like'));
+        count++;
+
+        this.setAttribute('data-like', count);
+        this.innerHTML = count + ' <i class="fa fa-heart"></i>';
+
+        // mark as liked
+        this.setAttribute('data-liked', "1");
+    });
+});
+</script>
+
+<!-- HEIGHT FIX -->
+<style>
+.blog-item {
+    height: 100%;
+}
+
+.blog-content {
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+</style>
+        <!-- Blog End -->
+
+
+        <!-- Gallery Start -->
+        <!-- <div class="container-fluid gallery py-5 px-0">
+            <div class="text-center mx-auto pb-5" style="max-width: 800px;">
+                <h5 class="text-uppercase text-primary">Our work</h5>
+                <h1 class="mb-4">We consider environment welfare</h1>
+                <p class="mb-0">Lorem ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor.</p>
+            </div>
+            <div class="row g-0">
+                <div class="col-lg-4">
+                    <div class="gallery-item">
+                        <img src="img/gallery-2.jpg" class="img-fluid w-100" alt="">
+                        <div class="search-icon">
+                            <a href="img/gallery-2.jpg" data-lightbox="gallery-2" class="my-auto"><i class="fas fa-search-plus btn-hover-color bg-white text-primary p-3"></i></a>
+                        </div>
+                        <div class="gallery-content">
+                            <div class="gallery-inner pb-5">
+                                <a href="#" class="h4 text-white">Beauty Of Life</a>
+                                <a href="#" class="text-white"><p class="mb-0">Gallery Name</p></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="img/gallery-3.jpg" class="img-fluid w-100" alt="">
+                        <div class="search-icon">
+                            <a href="img/gallery-3.jpg" data-lightbox="gallery-3" class="my-auto"><i class="fas fa-search-plus btn-hover-color bg-white text-primary p-3"></i></a>
+                        </div>
+                        <div class="gallery-content">
+                            <div class="gallery-inner pb-5">
+                                <a href="#" class="h4 text-white">Beauty Of Life</a>
+                                <a href="#" class="text-white"><p class="mb-0">Gallery Name</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="gallery-item">
+                        <img src="img/gallery-1.jpg" class="img-fluid w-100" alt="">
+                        <div class="search-icon">
+                            <a href="img/gallery-1.jpg" data-lightbox="gallery-1" class="my-auto"><i class="fas fa-search-plus btn-hover-color bg-white text-primary p-3"></i></a>
+                        </div>
+                        <div class="gallery-content">
+                            <div class="gallery-inner pb-5">
+                                <a href="#" class="h4 text-white">Beauty Of Life</a>
+                                <a href="#" class="text-white"><p class="mb-0">Gallery Name</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="gallery-item">
+                        <img src="img/gallery-4.jpg" class="img-fluid w-100" alt="">
+                        <div class="search-icon">
+                            <a href="img/gallery-4.jpg" data-lightbox="gallery-4" class="my-auto"><i class="fas fa-search-plus btn-hover-color bg-white text-primary p-3"></i></a>
+                        </div>
+                        <div class="gallery-content">
+                            <div class="gallery-inner pb-5">
+                                <a href="#" class="h4 text-white">Beauty Of Life</a>
+                                <a href="#" class="text-white"><p class="mb-0">Gallery Name</p></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="img/gallery-5.jpg" class="img-fluid w-100" alt="">
+                        <div class="search-icon">
+                            <a href="img/gallery-5.jpg" data-lightbox="gallery-5" class="my-auto"><i class="fas fa-search-plus btn-hover-color bg-white text-primary p-3"></i></a>
+                        </div>
+                        <div class="gallery-content">
+                            <div class="gallery-inner pb-5">
+                                <a href="#" class="h4 text-white">Beauty Of Life</a>
+                                <a href="#" class="text-white"><p class="mb-0">Gallery Name</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- Gallery End -->
+
+
+        <!-- Volunteers Start -->
+        <!-- <div class="container-fluid volunteer py-5 mt-5">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-5">
+                        <div class="row g-4">
+                            <div class="col-lg-6">
+                                <div class="volunteer-img">
+                                    <img src="img/volunteers-1.jpg" class="img-fluid w-100" alt="Image">
+                                    <div class="volunteer-title">
+                                        <h5 class="mb-2 text-white">Michel Brown</h5>
+                                        <p class="mb-0 text-white">Communicator</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="volunteer-img">
+                                    <img src="img/volunteers-3.jpg" class="img-fluid w-100" alt="Image">
+                                    <div class="volunteer-title">
+                                        <h5 class="mb-2 text-white">Michel Brown</h5>
+                                        <p class="mb-0 text-white">Communicator</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="volunteer-img">
+                                    <img src="img/volunteers-2.jpg" class="img-fluid w-100" alt="Image">
+                                    <div class="volunteer-title">
+                                        <h5 class="mb-2 text-white">Michel Brown</h5>
+                                        <p class="mb-0 text-white">Communicator</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="volunteer-img">
+                                    <img src="img/volunteers-4.jpg" class="img-fluid w-100" alt="Image">
+                                    <div class="volunteer-title">
+                                        <h5 class="mb-2 text-white">Michel Brown</h5>
+                                        <p class="mb-0 text-white">Communicator</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <h5 class="text-uppercase text-primary">Become a Volunteer?</h5>
+                        <h1 class="mb-4">Join your hand with us for a better life and beautiful future.</h1>
+                        <p class="mb-4">Lorem ipsum dolor sit amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor amet consectur adip sed eiusmod amet consectur adip sed eiusmod tempor.
+                        </p>
+                        <p class="text-dark"><i class=" fa fa-check text-primary me-2"></i> We are friendly to each other.</p>
+                        <p class="text-dark"><i class=" fa fa-check text-primary me-2"></i> If you join with us,We will give you free training.</p>
+                        <p class="text-dark"><i class=" fa fa-check text-primary me-2"></i> Its an opportunity to help poor Environments.</p>
+                        <p class="text-dark"><i class=" fa fa-check text-primary me-2"></i> No goal requirements.</p>
+                        <p class="text-dark mb-5"><i class=" fa fa-check text-primary me-2"></i> Joining is tottaly free. We dont need any money from you.</p>
+                        <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="#">Join With Us</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- Volunteers End -->
+       <div class="container-fluid volunteer py-5 mt-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h4 class="text-uppercase text-primary">Become a Volunteer?</h4>
+                <h1 class="mb-4 fw-bold">
+                    Join RescueNet & Be the First Help
+                </h1>
+                <p class="mb-4 text-muted">
+                    Be a part of a quick-response community. Help report emergencies, coordinate rescue actions, and support victims when they need it most.
+                </p>
+            </div>
+
+            <div class="col-lg-10">
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <div class="p-4 border rounded-4 h-100 shadow-sm bg-white pro-card">
+                            <h5 class="mb-3">🚨 Emergency Response Team</h5>
+                            <p class="text-muted mb-0">
+                                Be the first line of support during disasters.  
+                                Respond quickly and save lives.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-4 border rounded-4 h-100 shadow-sm bg-white pro-card">
+                            <h5 class="mb-3">🧭 Rescue Coordination</h5>
+                            <p class="text-muted mb-0">
+                                Help organize rescue efforts, guide teams, and manage relief operations.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-4 border rounded-4 h-100 shadow-sm bg-white pro-card">
+                            <h5 class="mb-3">🫶 Community Support</h5>
+                            <p class="text-muted mb-0">
+                                Assist with food, shelter, and medical support for affected families.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-4 border rounded-4 h-100 shadow-sm bg-white pro-card">
+                            <h5 class="mb-3">✅ Simple & Free Joining</h5>
+                            <p class="text-muted mb-0">
+                                No fees, no long forms. Just sign up and start helping.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-center mt-5">
+                    <a class="btn-hover-bg btn btn-primary text-white py-2 px-4" href="{% url 'Volunteer:ViewMyTask' %}">
+                        View My Tasks
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .pro-card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .pro-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+
+        <!-- Footer Start -->
+      <!-- Footer Start -->
+<div class="container-fluid footer bg-dark text-body py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <!-- About -->
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-item">
+                    <h4 class="mb-4 text-white">Disaster RescueNet</h4>
+                    <p class="mb-4 text-muted">
+                        A community-driven disaster management platform.
+                        Report emergencies, join volunteers, and support relief actions.
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                        Kerala, India
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="fa fa-phone-alt text-primary me-2"></i>
+                        +91 98765 43210
+                    </p>
+                    <p class="text-muted mb-0">
+                        <i class="fa fa-envelope text-primary me-2"></i>
+                        support@rescuenet.com
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="mb-4 text-white">Quick Links</h4>
+                    <a href="#"><i class="fas fa-angle-right me-2"></i> Home</a>
+                    <a href="#"><i class="fas fa-angle-right me-2"></i> Emergency Alert</a>
+                    <a href="#"><i class="fas fa-angle-right me-2"></i> Volunteer</a>
+                    <a href="#"><i class="fas fa-angle-right me-2"></i> Relief Fund</a>
+                    <a href="#"><i class="fas fa-angle-right me-2"></i> Reports</a>
+                    <a href="#"><i class="fas fa-angle-right me-2"></i> Contact Us</a>
+                </div>
+            </div>
+
+            <!-- Emergency Contacts -->
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="mb-4 text-white">Emergency Contacts</h4>
+                    <p class="text-muted mb-2">
+                        <i class="fa fa-phone text-primary me-2"></i>
+                        112 - Emergency Helpline
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fa fa-phone text-primary me-2"></i>
+                        101 - Fire Department
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fa fa-phone text-primary me-2"></i>
+                        108 - Ambulance
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fa fa-phone text-primary me-2"></i>
+                        1070 - Disaster Management
+                    </p>
+                </div>
+            </div>
+
+            <!-- Subscribe -->
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-item">
+                    <h4 class="mb-4 text-white">Stay Updated</h4>
+                    <p class="mb-4 text-muted">
+                        Get alerts, news, and disaster updates directly in your inbox.
+                    </p>
+                    <div class="position-relative mx-auto">
+                        <input class="form-control border-0 bg-secondary w-100 py-3 ps-4 pe-5" type="text" placeholder="Enter your email">
+                        <button type="button" class="btn-hover-bg btn btn-primary position-absolute top-0 end-0 py-2 mt-2 me-2">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Copyright Start -->
+<div class="container-fluid copyright py-4 bg-black">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-md-4 text-center text-md-start mb-md-0">
+                <span class="text-body">
+                    <i class="fas fa-copyright text-light me-2"></i>
+                    RescueNet | All Rights Reserved
+                </span>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    <a href="#" class="btn-hover-color btn-square text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="btn-hover-color btn-square text-white me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn-hover-color btn-square text-white me-2"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn-hover-color btn-square text-white me-2"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="btn-hover-color btn-square text-white me-0"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4 text-center text-md-end text-body">
+                “No panic, just preparedness.”
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Copyright End --> <!-- Copyright End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
+
+        
+        <!-- JavaScript Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'Main/lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'Main/lib/waypoints/waypoints.min.js' %}"></script>
+        <script src="{% static 'Main/lib/counterup/counterup.min.js' %}"></script>
+        <script src="{% static 'Main/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'Main/lib/lightbox/js/lightbox.min.js' %}"></script>
+        
+
+        <!-- Template Javascript -->
+        <script src="{% static 'Main/js/main.js' %}"></script>
+
+    </body>
+
+</html>

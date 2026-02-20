@@ -1,0 +1,97 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint</title>
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1; /* soft background */
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 60%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        th, td {
+            border: 1px solid #cfd4dc;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        input[type="text"], textarea {
+            width: 95%;
+            padding: 8px;
+            border: 1px solid #cfd4dc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            background-color: #e39c7d;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #d17b58;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+            transition: background 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+   <form action="" method="post">
+     {% csrf_token %}
+      <h2>Complaint Box</h2>
+      <table>
+        <tr>
+            <td>Title</td>
+            <td><input type="text" name="txt_title" id="txt_title"></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><textarea name="txt_description" id="txt_description" rows="7"></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="Submit"></td>
+        </tr>
+      </table>
+   </form> 
+
+{% if msg %}
+<script>
+    alert("{{msg}}")
+</script>
+{% endif %}
+</body>
+</html>
+
+{% endblock %}

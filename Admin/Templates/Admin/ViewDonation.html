@@ -1,0 +1,181 @@
+{% extends 'Admin/Header.html' %}
+{% block content %}
+
+<style>
+    .donation-container {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background-color: #f6f7fb;
+        padding: 25px;
+        color: #333;
+    }
+
+    table {
+        width: 95%;
+        margin: 25px auto;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #153e77;
+        color: white;
+        font-weight: 600;
+    }
+
+    tr:hover td {
+        background-color: #f2f5fa;
+    }
+
+    .btn-custom {
+        padding: 7px 14px;
+        border: none;
+        border-radius: 5px;
+        background-color: #03c7dd;
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    .btn-custom:hover {
+        background-color: #5a79a6;
+        color: white;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="donation-container">
+
+<h2>Donation List</h2>
+
+<form method="post" action="{% url 'Admin:SendSelectedCollection' %}">
+    {% csrf_token %}
+
+    <div style="text-align:center; margin-bottom:15px;">
+        <a href="{% url 'Admin:SendAllCollection' %}" class="btn-custom">
+            Send ALL for Collection
+        </a>
+        <button type="submit" class="btn-custom">
+            Send Selected for Collection
+        </button>
+    </div>
+
+    <table>
+        <tr>
+            <th>Select</th>
+            <th>SI.NO</th>
+            <th>Donator</th>
+            <th>Type</th>
+            <th>Remark</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Volunteer</th>
+            <th>Status</th>
+        </tr>
+
+        {% for i in viewdonationdata %}
+        <tr>
+
+            <!-- Checkbox -->
+            <td>
+                {% if i.tbl_collectionrequest_set.first %}
+                    <input type="checkbox" disabled>
+                {% else %}
+                    <input type="checkbox" name="donation_ids" value="{{ i.id }}">
+                {% endif %}
+            </td>
+
+            <!-- SI NO -->
+            <td>{{ forloop.counter }}</td>
+
+            <!-- Donator -->
+            <td>
+                {% if i.user_id %}
+                    {{ i.user_id.user_name }}
+                {% elif i.volunteer_id %}
+                    {{ i.volunteer_id.volunteer_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Type -->
+            <td>{{ i.donation_type }}</td>
+
+            <!-- Remark -->
+            <td>{{ i.donation_remark }}</td>
+
+            <!-- Amount -->
+            <td>{{ i.donation_amount }}</td>
+
+            <!-- Date -->
+            <td>{{ i.donation_date }}</td>
+
+            <!-- Volunteer -->
+            <td>
+                {% if i.tbl_collectionrequest_set.first %}
+                    {% if i.tbl_collectionrequest_set.first.volunteer_id %}
+                        {{ i.tbl_collectionrequest_set.first.volunteer_id.volunteer_name }}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Status -->
+            <td>
+                {% if i.tbl_collectionrequest_set.first %}
+                    {% if i.tbl_collectionrequest_set.first.status == 0 %}
+                        Request Sent
+                    {% elif i.tbl_collectionrequest_set.first.status == 1 %}
+                        Accepted
+                    {% elif i.tbl_collectionrequest_set.first.status == 2 %}
+                        Collected
+                    {% elif i.tbl_collectionrequest_set.first.status == 3 %}
+                        Delivered
+                    {% endif %}
+                {% else %}
+                    Pending
+                {% endif %}
+            </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9">No Donations Found</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</form>
+
+</div>
+
+{% if msg %}
+<script>
+    alert("{{ msg }}");
+    window.location = "{% url 'Admin:ViewDonation' %}";
+</script>
+{% endif %}
+
+{% endblock %}

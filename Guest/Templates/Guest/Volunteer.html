@@ -1,0 +1,193 @@
+{% extends 'Guest/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Registration</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 25px;
+        }
+
+        form {
+            width: 90%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #e39c7d;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], textarea, select, input[type="file"] {
+            width: 80%;
+            padding: 8px;
+            border: 1px solid #cfd4dc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #0b1e47;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1e40af;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        td[colspan="2"] {
+            text-align: center;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+       <h2 style="text-align: center; font-family: 'Times New Roman', Times, serif;">
+    Volunteer Registration
+</h2>
+
+
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text"  required title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" name="txt_name" id="txt_name" placeholder="Enter Your Name"></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" required name="txt_email" id="txt_email" placeholder="Enter Email"></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number, one uppercase, one lowercase letter, and at least 8 characters" name="txt_password" id="txt_password" placeholder="Enter Password"></td>
+            </tr>
+            <tr>
+                <td>Confirm Password</td>
+                <td><input type="password" required  name="txt_confirm" id="txt_confirm" placeholder="Confirm Password"></td>
+            </tr>
+            <tr>
+                <td>Photo</td>
+                <td><input type="file" required name="file_photo" id="file_photo"></td>
+            </tr>
+            <tr>
+                <td>Proof</td>
+                <td><input type="file" required name="file_proof" id="file_proof"></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea name="txt_address" required id="txt_address" placeholder="Enter Your Address"></textarea></td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+                <td><input type="text" required name="txt_contact"  pattern="[7-9]{1}[0-9]{9}" title="Phone number with 7-9 and remaining 9 digits with 0-9" id="txt_contact" placeholder="Enter contact number"></td>
+            </tr>
+            <tr>
+                <td>District</td>
+                <td>
+                    <select name="sel_distirct" required id="sel_distirct">
+                        <option value="">--select--</option>
+                        {% for i in districts %}
+                        <option value="{{i.id}}">{{ i.district_name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Place</td>
+                <td>
+                    <select name="sel_place" id="sel_place">
+                        <option value="">--select--</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Emergency</td>
+                <td><input type="checkbox" name="txt_emergency" id="txt_emergency" value="1">Can you Handle Emergency Situation</td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
+
+    {% if msg %}
+    <script>
+        alert("{{msg}}")
+        window.location="{% url 'Guest:Volunteer' %}";
+    </script>
+    {% endif %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $("#sel_distirct").change(function () {
+            var did = $(this).val();
+            var ur = "{% url 'Guest:ajaxplace' %}"
+            $.ajax({
+                url: ur,
+                data: { did: did },
+                success: function (data) {
+                    $("#sel_place").html(data);
+                },
+            });
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

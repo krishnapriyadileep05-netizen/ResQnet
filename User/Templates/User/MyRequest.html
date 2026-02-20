@@ -1,0 +1,170 @@
+{% extends 'User/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Requests</title>
+
+    <style>
+    body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background-color: #f3eadaa1;
+    padding: 30px;
+    color: #374151;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #1f2937;
+}
+
+table {
+    width: 95%;
+    margin: auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+table, th, td {
+    border: none;
+}
+
+th {
+    background-color: #e39c7d;
+    padding: 14px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #374151;
+
+    border-bottom: 2px solid #9ca3af;   /* horizontal line */
+    border-right: 1px solid #b3b6bd;    /* vertical line */
+}
+
+td {
+    padding: 12px;
+    font-size: 13px;
+    color: #374151;
+
+    border-bottom: 1px solid #b3b6bd;   /* row lines */
+    border-right: 1px solid #b3b6bd;    /* column lines */
+}
+
+/* remove right border from last column */
+th:last-child,
+td:last-child {
+    border-right: none;
+}
+
+/* remove bottom border from last row */
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: #f9fafb;
+    transition: background 0.2s ease;
+}
+
+a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+td[colspan="11"] {
+    padding: 20px;
+    color: #6b7280;
+}
+
+    </style>
+</head>
+
+<body>
+
+<h2 align="center">My Requests</h2>
+
+<table align="center">
+    <tr>
+        <th>SI.NO</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>District</th>
+        <th>Place</th>
+        <th>Request Type</th>
+        <th>To Date</th>
+        <th>Created Date</th>
+        <th>Status</th>
+        <th>Admin Message</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in requestdata %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.request_title }}</td>
+        <td>{{ i.request_content }}</td>
+        <td>{{ i.place_id.district.district_name }}</td>
+        <td>{{ i.place_id.place_name }}</td>
+
+        <td>
+            {% if i.request_type == 1 %}
+                Emergency / Volunteer Help
+            {% else %}
+                Donation
+            {% endif %}
+        </td>
+
+        <td>{{ i.request_todate }}</td>
+        <td>{{ i.request_date }}</td>
+
+        <td>
+            {% if i.request_status == 0 %}
+                Pending
+            {% elif i.request_status == 1 %}
+                Accepted
+            {% elif i.request_status == 2 %}
+                Completed
+            {% else %}
+                Rejected
+            {% endif %}
+        </td>
+
+        <td>
+            {% if i.request_message %}
+                {{ i.request_message }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+
+        <td>
+            {% if i.request_status == 1 %}
+                <a href="{% url 'User:ViewMembers' i.id %}">View Volunteers</a>
+            {% else %}
+                N/A
+            {% endif %}
+        </td>
+    </tr>
+
+    {% empty %}
+    <tr>
+        <td colspan="11" align="center">No Requests Found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
+
+{% endblock %}

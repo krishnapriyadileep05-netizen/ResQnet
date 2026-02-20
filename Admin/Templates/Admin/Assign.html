@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h2 style="text-align: center;"> Assign Volunteer </h2>
+        <table border="1" align="center">
+            <tr>
+                <td>District</td>
+                <td><select name="sel_distirct" id="sel_distirct">
+                    <option value="">--select district--</option>
+                    {% for i in district %}
+                    <option value="{{ i.id }}">
+                        {{ i.district_name }}
+                    </option>
+                    {% endfor %}
+                </select></td>
+            </tr>
+            <tr>
+                <td>Place</td>
+                <td><select name="sel_place" id="sel_place">
+                    <option value="">--select place--</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><input type="text" name="txt_description" id="txt_description"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"> <input type="submit" value="Submit"></td>
+                
+            </tr>
+        </table>
+    </form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#sel_distirct").change(function () {
+        var did = $(this).val();
+
+        var ur = "{% url 'Guest:ajaxplace' %}"
+        $.ajax({
+            url: ur,
+            data: { did: did, },
+            success: function (data) {
+                $("#sel_place").html(data);
+            },
+        });
+    });
+</script>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location="{% url 'Admin:VolunteerList' %}";
+</script>
+{% endif %}
+</html>

@@ -1,0 +1,78 @@
+{% extends 'User/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewCamp</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        table {
+            width: 85%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        td {
+            border: 1px solid #cfd4dc;   /* row + column lines */
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        tr:first-child td {
+            background-color: #e39c7d;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" method="post">
+        <h2 style="text-align: center;">Camp Details</h2>
+
+        <table>
+            <tr>
+                <td>SI.NO</td>
+                <td>District</td>
+                <td>Place</td>
+                <td>Details</td>
+            </tr>
+
+            {% for i in campdata %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.place_id.district.district_name }}</td>
+                <td>{{ i.place_id.place_name }}</td>
+                <td>{{ i.camp_details }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+</html>
+
+{% endblock %}

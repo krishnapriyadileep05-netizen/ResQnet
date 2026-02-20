@@ -1,0 +1,112 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Collection Requests</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            text-align: center;
+        }
+
+        table {
+            width: 95%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        th, td {
+            border: 1px solid #cfd4dc; /* row + column lines */
+            padding: 12px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #e39c7d;
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        td[colspan="7"] {
+            padding: 20px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Nearby Collection Requests</h2>
+
+<table>
+    <tr>
+        <th>Donator</th>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>District</th>
+        <th>Delivery Place</th>
+        <th>Contact</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in requests %}
+    <tr>
+        <td>{{ r.donation_id.user_id.user_name }}</td>
+        <td>{{ r.donation_id.donationitem_id.donationitems_name }}</td>
+        <td>{{ r.donation_id.donation_amount }}</td>
+        <td>{{ r.donation_id.user_id.place.district.district_name }}</td>
+        <td>{{ r.donation_id.user_id.place.place_name }}</td>
+        <td>{{ r.donation_id.user_id.user_contact }}</td>
+        <td>
+            {% if r.status == 1 %}
+                <a href="{% url 'Volunteer:updatestatus' r.id 2 %}">Collected</a>
+            {% elif r.status == 2 %}
+                <a href="{% url 'Volunteer:updatestatus' r.id 3 %}">Delivered</a>
+            {% elif r.status == 3 %}
+                <span>Completed</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="7">No Nearby Requests</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
+
+{% endblock %}

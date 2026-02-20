@@ -1,0 +1,134 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Request</title>
+    <style>
+    body {
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+        background-color: #f3eadaa1;
+        padding: 30px;
+        color: #374151;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: #1f2937;
+        text-align: center;
+    }
+
+    table {
+        width: 95%;
+        margin: auto;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    th, td {
+        border: 1px solid #cfd4dc;
+        padding: 12px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #e39c7d;
+        font-weight: 600;
+    }
+
+    tr:hover td {
+        background-color: #f9fafb;
+    }
+
+    a {
+        text-decoration: none;
+        color: #2563eb;
+        font-weight: 500;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    td[colspan="8"] {
+        padding: 20px;
+        color: #6b7280;
+    }
+
+    /* Highlight important requests */
+    .important {
+        background-color: #fff4e6;
+        font-weight: 600;
+    }
+
+    /* Joined status highlight */
+    .joined {
+        background-color: #d1ffd6;
+        font-weight: 600;
+    }
+</style>
+
+</head>
+
+<body>
+
+    <h2 style="text-align: center;">Available Requests</h2>
+
+    <table border="1" align="center">
+        <tr>
+            <th>SI.NO</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>District</th>
+            <th>Place</th>
+            <th>Date</th>
+            <th>To Date</th>
+            <th>Action</th>
+        </tr>
+
+        {% for i in requestdata %}
+        <tr {% if i.is_important %}class="important" {% endif %}>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.request_title }}</td>
+            <td>{{ i.request_content }}</td>
+            <td>{{ i.place_id.district.district_name }}</td>
+            <td>{{ i.place_id.place_name }}</td>
+            <td>{{ i.request_date }}</td>
+            <td>{{ i.request_todate }}</td>
+            <td>
+                {% if not i.joined %}
+                <a href="{% url 'Volunteer:Join' i.id %}">Join</a>
+                {% else %}
+                Joined
+                {% endif %}
+            </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" align="center">No Requests Available</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if msg %}
+    <script>
+        alert("{{ msg }}");
+        window.location = "{% url 'Volunteer:ViewRequest' %}";
+    </script>
+    {% endif %}
+
+</body>
+
+</html>
+
+{% endblock %}

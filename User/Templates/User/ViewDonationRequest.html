@@ -1,0 +1,121 @@
+{% extends 'User/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewDonation</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #1f2937;
+        }
+
+        table {
+            width: 85%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        table, td {
+            border: none;
+        }
+
+        /* Header row */
+        table tr:first-child td {
+            background-color: #e39c7d;
+            padding: 14px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #374151;
+            border-bottom: 2px solid #9ca3af;
+            border-right: 1px solid #b3b6bd;
+        }
+
+        /* Table cells */
+        td {
+            padding: 12px;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #b3b6bd;
+            border-right: 1px solid #b3b6bd;
+        }
+
+        /* Remove last column line */
+        td:last-child {
+            border-right: none;
+        }
+
+        /* Remove last row line */
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f9fafb;
+            transition: background 0.2s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <h2 style="text-align: center;">Donation Request</h2>
+
+    <table align="center">
+        <tr>
+            <td>SI.NO</td>
+            <td>District</td>
+            <td>Place</td>
+            <td>Details</td>
+            <td>Action</td>
+        </tr>
+
+        {% for i in requestdata %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.place_id.district.district_name }}</td>
+            <td>{{ i.place_id.place_name }}</td>
+            <td>{{ i.donationrequest_details }}</td>
+            <td>
+                <a href="{% url 'User:ViewItem' i.id %}">View Item</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</form>
+
+</body>
+</html>
+
+{% endblock %}
