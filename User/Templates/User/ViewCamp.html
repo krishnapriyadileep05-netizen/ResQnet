@@ -60,16 +60,27 @@
                 <td>District</td>
                 <td>Place</td>
                 <td>Details</td>
+                <td>Status</td> 
             </tr>
 
-            {% for i in campdata %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ i.place_id.district.district_name }}</td>
-                <td>{{ i.place_id.place_name }}</td>
-                <td>{{ i.camp_details }}</td>
-            </tr>
-            {% endfor %}
+          {% for i in campdata %}
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ i.place_id.district.district_name }}</td>
+    <td>{{ i.place_id.place_name }}</td>
+    <td>{{ i.camp_details }}</td>
+
+    <td>
+        {% if i.camp_status == 1 %}
+            Started
+        {% elif i.camp_status == 2 %}
+            Ended
+        {% else %}
+            Not Started
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
         </table>
     </form>
 </body>

@@ -17,6 +17,77 @@
             border: 1px solid black;
             padding: 8px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .modal-body {
+            margin-bottom: 20px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .modal-footer {
+            text-align: right;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .delete-btn-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .delete-link {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .delete-link:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 
@@ -52,8 +123,47 @@
                 <a href="{% url 'User:ChangePassword' %}">Change Password</a>
             </td>
         </tr>
+        <tr>
+            <td colspan="2" align="center" class="delete-btn-container">
+                <a onclick="openDeleteModal()" class="delete-link">Delete Account</a>
+            </td>
+        </tr>
     </table>
 </form>
+
+<!-- Delete Account Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            Delete Account
+        </div>
+        <div class="modal-body">
+            <strong>Warning:</strong> Are you sure you want to permanently delete your account? This action cannot be undone. All your data and history will be removed from the system.
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <a href="{% url 'User:DeleteAccount' %}" class="btn btn-delete">Yes, Delete My Account</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal() {
+        document.getElementById("deleteModal").style.display = "block";
+    }
+
+    function closeDeleteModal() {
+        document.getElementById("deleteModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        var modal = document.getElementById("deleteModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
 </body>
 </html>
 

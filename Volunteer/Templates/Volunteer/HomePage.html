@@ -77,13 +77,13 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="topbar-icon d-flex align-items-center justify-content-end">
+                            <!-- <div class="topbar-icon d-flex align-items-center justify-content-end">
                                 <a href="#" class="btn-square text-white me-2"><i class="fab fa-facebook-f"></i></a>
                                 <a href="#" class="btn-square text-white me-2"><i class="fab fa-twitter"></i></a>
                                 <a href="#" class="btn-square text-white me-2"><i class="fab fa-instagram"></i></a>
                                 <a href="#" class="btn-square text-white me-2"><i class="fab fa-pinterest"></i></a>
                                 <a href="#" class="btn-square text-white me-0"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -109,6 +109,8 @@
                                     <a href="{% url 'Volunteer:VolunteerCollectionRequest' %}" class="dropdown-item">View Collection Request</a>
                                     <a href="{% url 'Volunteer:MyCollectionRequest' %}" class="dropdown-item">My Collection Request</a>
                                     <a href="{% url 'Volunteer:ViewMyTask' %}" class="dropdown-item">My Task</a>
+                                    <a href="{% url 'Volunteer:CreateExpenseRequest' %}" class="dropdown-item">Request Expense Payment</a>
+                                    <a href="{% url 'Volunteer:ViewMyExpenseRequests' %}" class="dropdown-item">My Expense Requests</a>
                                     <!-- <a href="donation.html" class="dropdown-item">Donation</a>
                                     <a href="404.html" class="dropdown-item">404 Error</a> -->
                                 </div>

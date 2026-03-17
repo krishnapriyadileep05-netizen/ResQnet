@@ -1,0 +1,180 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Request</title>
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        input[type="number"], 
+        input[type="text"], 
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cfd4dc;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        input[type="number"]:focus, 
+        input[type="text"]:focus, 
+        textarea:focus {
+            outline: none;
+            border-color: #e39c7d;
+            box-shadow: 0 0 0 3px rgba(227, 156, 125, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button[type="submit"] {
+            background-color: #e39c7d;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #d17b58;
+        }
+
+        button[type="reset"] {
+            background-color: #9ca3af;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        button[type="reset"]:hover {
+            background-color: #6b7280;
+        }
+
+        .info-box {
+            background-color: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #1e40af;
+        }
+
+        .success-message {
+            background-color: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #065f46;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if msg %}
+        <div class="success-message">
+            {{ msg }}
+            <br>
+            <a href="{% url 'Volunteer:ViewMyExpenseRequests' %}" style="text-decoration: underline;">View My Requests</a>
+        </div>
+        {% endif %}
+
+        <h2>Request Expense Payment</h2>
+        
+        <div class="info-box">
+            <strong>ℹ️ Information:</strong> Submit your expense requests here. Upload bill/receipt as proof. The admin will review and process your payment requests. Once approved and paid, the amount will be deducted from the total donations.
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="txt_amount">Amount (₹) <span style="color:red;">*</span></label>
+                <input type="number" name="txt_amount" id="txt_amount" placeholder="Enter the amount" required>
+            </div>
+
+            <div class="form-group">
+                <label for="txt_purpose">Purpose <span style="color:red;">*</span></label>
+                <input type="text" name="txt_purpose" id="txt_purpose" placeholder="E.g., Buy Medicines, Transportation, Food..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="txt_bank_details">Bank Details</label>
+                <textarea name="txt_bank_details" id="txt_bank_details" placeholder="Add Bank Details (Account Holder Name, Account Number, IFSC Code, Bank Name)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="file_bill">Upload Bill/Receipt <span style="color:red;">*</span></label>
+                <input type="file" name="file_bill" id="file_bill" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required style="padding: 10px; border: 1px solid #cfd4dc; border-radius: 6px; width: 100%; cursor: pointer;">
+                <small style="color: #6b7280; display: block; margin-top: 5px;">Accepted formats: PDF, JPG, PNG, DOC, DOCX (Max 5MB)</small>
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Submit Request</button>
+                <button type="reset">Clear</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+{% endblock %}

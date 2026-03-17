@@ -69,12 +69,24 @@ def Complaint(request):
 
 
 def Request(request):
+    """
+    Handle user request creation - supports two types:
+    
+    REQUEST TYPES:
+    - Type 0 (Donation): User requests donations/items from the community
+      * Volunteers CANNOT join donation requests
+      * Only for community contribution coordination
+    
+    - Type 1 (Emergency/Volunteer Help): User seeks volunteer assistance
+      * Volunteers CAN view and join these requests
+      * Used for emergency response and volunteer tasks
+    """
     if "uid" not in request.session:
         return redirect("Guest:Login")
     district = tbl_district.objects.all()
     requestdata = tbl_request.objects.filter(user_id=request.session["uid"])
     if request.method == "POST":
-        req_type = int(request.POST.get("req_type"))  
+        req_type = int(request.POST.get("req_type"))
         tbl_request.objects.create(
             request_title=request.POST.get("txt_title"),
             request_content=request.POST.get("txt_content"),
@@ -85,6 +97,10 @@ def Request(request):
         )
         return redirect("User:MyRequest")
     return render(request, 'User/request.html', {'district': district,'requestdata': requestdata})
+
+def CancelRequest(request,id):
+    tbl_request.objects.get(id=id).delete()
+    return redirect("User:MyRequest")
 
 def ViewDonationRequest(request):
     if "uid" not in request.session:
@@ -207,3 +223,34 @@ def DirectDonation(request):
         )
         return render(request,"User/Payment_suc.html")
     return render(request, "User/DirectDonation.html")
+
+
+def DeleteAccount(request):
+    """
+    Delete user account by updating user_status to 2 (deleted/deactivated).
+    Logs out the user and redirects to login page.
+    """
+    if "uid" not in request.session:
+        return redirect("Guest:Login")
+    
+    try:
+        # Get the user
+        user = tbl_user.objects.get(id=request.session["uid"])
+        
+        # Update user status to 2 (deleted/deactivated)
+        user.user_status = 2
+        user.save()
+        
+        # Clear the session
+        if "uid" in request.session:
+            del request.session["uid"]
+        
+        # Redirect to login with success message
+        return redirect("Guest:Login")
+    except tbl_user.DoesNotExist:
+        # User not found
+        return redirect("Guest:Login")
+    except Exception as e:
+        # Log error and redirect
+        print(f"Error deleting account: {str(e)}")
+        return redirect("User:MyProfile")

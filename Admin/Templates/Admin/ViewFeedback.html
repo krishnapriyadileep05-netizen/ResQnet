@@ -1,0 +1,78 @@
+{% extends 'Admin/Header.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewFeedback</title>
+    <style>
+    body{
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(135deg,#eef2f3,#dfe9f3);
+        margin:0;
+        padding:40px;
+    }
+
+    h2{
+        text-align:center;
+        color:#333;
+        margin-bottom:25px;
+    }
+
+    table{
+        border-collapse:collapse;
+        width:70%;
+        margin:auto;
+        background:white;
+        border-radius:10px;
+        overflow:hidden;
+        box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+
+  th, td{
+    border:1px solid #ccc;   /* horizontal and vertical lines */
+    padding:12px 15px;
+    text-align:center;
+}
+
+tr:first-child{
+    background:#021384;
+    
+    font-weight:bold;
+}
+
+tr:not(:first-child) td{
+    color:black;      /* list text black */
+}
+
+    td{
+        color:#fff6f6;
+        font-size:14px;
+    }
+</style>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <br>  <h2>View User Feedback</h2>
+        <table align="center" border="1">
+<tr>
+    <td>SI.NO</td>
+    <td>User Name</td>
+    <td>Content</td>
+    <td>Date</td>
+</tr>
+{% for i in feedbackdata %}
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ i.user_id.user_name }}</td>
+    <td>{{ i.feedback_content }}</td>
+    <td>{{ i.feedback_date }}</td>
+</tr>
+{% endfor %}
+        </table>
+    </form>
+</body>
+</html>
+{% endblock %}

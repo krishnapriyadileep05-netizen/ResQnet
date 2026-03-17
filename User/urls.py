@@ -10,6 +10,7 @@ urlpatterns = [
     path("HomePage/",views.HomePage,name="HomePage"),
     path("Complaint/",views.Complaint,name="Complaint"),
     path("Request/",views.Request,name="Request"),
+    path('CancelRequest/<int:id>/', views.CancelRequest, name='CancelRequest'),
     path("ViewDonationRequest/",views.ViewDonationRequest,name="ViewDonationRequest"),
     path("ViewItem/<int:id>",views.ViewItem,name="ViewItem"),
     path("Donate/<int:id>",views.Donate,name="Donate"),
@@ -21,9 +22,5 @@ urlpatterns = [
     path('MyRequest/', views.MyRequest, name='MyRequest'),
     path("ViewMembers/<int:rid>/", views.ViewMembers, name="ViewMembers"),
     path("ViewAwareness/", views.ViewAwareness, name="ViewAwareness"),
-
-
-
-
-
+    path("DeleteAccount/", views.DeleteAccount, name="DeleteAccount"),
 ]

@@ -68,3 +68,22 @@ class tbl_taskmember(models.Model):
     response_id = models.ForeignKey(tbl_response, on_delete=models.CASCADE)
     collectionrequest = models.ForeignKey(tbl_collectionrequest,on_delete=models.CASCADE,null=True)
     team_id = models.ForeignKey(tbl_team, on_delete=models.CASCADE,null=True)
+
+
+class tbl_collectionmember(models.Model):
+    collection_id = models.ForeignKey(tbl_collectionrequest, on_delete=models.CASCADE)
+    team_id = models.ForeignKey(tbl_team, on_delete=models.CASCADE)
+
+
+
+class tbl_volunteer_expense_request(models.Model):
+    volunteer_id = models.ForeignKey(tbl_volunteer, on_delete=models.CASCADE)
+    expense_amount = models.IntegerField()
+    expense_purpose = models.CharField(max_length=300)
+    expense_description = models.TextField(null=True, blank=True)
+    bank_details = models.TextField(null=True, blank=True)  # Bank details for payment
+    expense_bill = models.FileField(upload_to='Assets/VolunteerDocs/Bills/', null=True, blank=True)
+    expense_date = models.DateField(auto_now_add=True)
+    expense_status = models.IntegerField(default=0)  # 0=Pending, 1=Approved, 2=Rejected, 3=Paid
+    paid_date = models.DateField(null=True, blank=True)
+    admin_remark = models.CharField(max_length=300, null=True, blank=True)

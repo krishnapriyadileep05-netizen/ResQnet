@@ -30,6 +30,10 @@ urlpatterns = [path("HomePage/",views.HomePage,name="HomePage"),
                path("delteam/<int:id>",views.delteam,name="delteam"),
 
                path("ViewMyTask/", views.ViewMyTask, name="ViewMyTask"),
-path("AssignMembers/<int:rid>/", views.AssignMembers, name="AssignMembers"),
+                path("AssignMembers/<int:rid>/", views.AssignMembers, name="AssignMembers"),
 
+                path('AssignCollectionMembers/<int:cid>', views.AssignCollectionMembers, name="AssignCollectionMembers"),
+
+               path('CreateExpenseRequest/', views.CreateExpenseRequest, name='CreateExpenseRequest'),
+               path('ViewMyExpenseRequests/', views.ViewMyExpenseRequests, name='ViewMyExpenseRequests'),
                ]

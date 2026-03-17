@@ -62,20 +62,29 @@
 
 <!-- Summary Section -->
 <div class="summary-section">
+
     <div class="summary-card">
         <h4>Total Donation</h4>
         <h2>₹ {{ total_amount }}</h2>
     </div>
 
     <div class="summary-card">
-        <h4>Today's Collection</h4>
-        <h2>₹ {{ today_amount }}</h2>
+        <h4>Amount Used</h4>
+        <h2 style="color:red;">₹ {{ total_used }}</h2>
     </div>
+
+    <div class="summary-card">
+        <h4>Balance</h4>
+        <h2 style="color:green;">₹ {{ balance }}</h2>
+    </div>
+
 </div>
 
 <!-- Donation Cards -->
 <div class="donation-container">
+
     {% for i in paymentdata %}
+
     <div class="donation-card">
         
         {% if i.user_id.user_photo %}
@@ -92,5 +101,32 @@
         <p>No Donations Found</p>
     {% endfor %}
 </div>
+
+
+<h3 align="center">Paid Expense History</h3>
+
+<table border="1" align="center" width="60%">
+    <tr>
+        <th>SI.NO</th>
+        <th>Volunteer</th>
+        <th>Amount</th>
+        <th>Purpose</th>
+        <th>Date Paid</th>
+    </tr>
+
+    {% for e in paid_expenses %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ e.volunteer_id.volunteer_name }}</td>
+        <td>₹ {{ e.expense_amount }}</td>
+        <td>{{ e.expense_purpose }}</td>
+        <td>{{ e.paid_date }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No Paid Expenses</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}

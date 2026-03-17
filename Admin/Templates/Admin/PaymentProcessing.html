@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .loader-container {
+            margin: 30px 0;
+        }
+
+        .spinner {
+            border: 5px solid #f3f4f6;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .payment-info {
+            background-color: #f0f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .payment-info-title {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .payment-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .status-text {
+            color: #667eea;
+            font-weight: 500;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .dots {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .dots span {
+            animation: dots 1.4s infinite;
+            display: inline-block;
+        }
+
+        .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dots {
+            0%, 20%, 50%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>💳 Processing Payment</h2>
+        <p class="subtitle">Please wait while we process your payment securely</p>
+
+        <div class="loader-container">
+            <div class="spinner pulse"></div>
+        </div>
+
+        <p class="status-text">
+            Processing<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+        </p>
+
+        <div class="payment-info">
+            <div class="payment-info-title">Payment Information</div>
+            <div class="payment-info-item">
+                <span>Volunteer:</span>
+                <span><strong>{{ payment.volunteer_name }}</strong></span>
+            </div>
+             
+            <div class="payment-info-item">
+                <span>Amount:</span>
+                <span><strong>₹ {{ payment.amount }}</strong></span>
+            </div>
+            <div class="payment-info-item">
+                <span>Bank Detail:</span>
+                <span><strong>₹{{ payment.expense.bank_details }}</strong></span>
+            </div>
+            <div class="payment-info-item">
+                <span>Purpose:</span>
+                <span><strong>{{ payment.purpose }}</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect to success page after 3 seconds
+        setTimeout(function() {
+            window.location.href = "{% url 'Admin:CompleteExpensePayment' %}";
+        }, 3000);
+    </script>
+</body>
+</html>

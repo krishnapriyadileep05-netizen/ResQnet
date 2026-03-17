@@ -25,5 +25,3 @@ class tbl_awareness(models.Model):
     awareness_image=models.FileField(upload_to='Awareness/')
     awareness_date=models.DateField(auto_now_add=True)
     awareness_status=models.IntegerField(default=0)  # 0=Active, 1=Inactive
-
-

@@ -1,0 +1,657 @@
+{% extends 'Admin/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Expense Requests</title>
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3f4f6;
+            padding: 20px;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            font-weight: 600;
+            color: #374151;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        td {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #fafbfc;
+        }
+
+        .amount {
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status-approved {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status-paid {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-approve {
+            background-color: #10b981;
+        }
+
+        .btn-approve:hover {
+            background-color: #059669;
+        }
+
+        .btn-pay {
+            background-color: #3b82f6;
+        }
+
+        .btn-pay:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-reject {
+            background-color: #ef4444;
+        }
+
+        .btn-reject:hover {
+            background-color: #dc2626;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .close {
+            color: #9ca3af;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #374151;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .btn-submit {
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-cancel {
+            background-color: #9ca3af;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #6b7280;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .description {
+            max-width: 250px;
+            word-wrap: break-word;
+        }
+
+        .bill-link {
+            color: #3b82f6;
+            text-decoration: underline;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .bill-link:hover {
+            color: #2563eb;
+        }
+
+        .bill-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+        }
+
+        .bill-modal-content {
+            background-color: #ffffff;
+            margin: 2% auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .bill-modal-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bill-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: white;
+            border: none;
+        }
+
+        .bill-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .bill-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .bill-modal-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .bill-viewer-container {
+            max-width: 100%;
+            max-height: 70vh;
+            overflow: auto;
+        }
+
+        .bill-viewer-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .bill-viewer-container embed,
+        .bill-viewer-container iframe {
+            width: 100%;
+            height: 600px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .bill-download-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .bill-download-btn:hover {
+            background-color: #059669;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Volunteer Expense Requests Management</h2>
+
+        <!-- PENDING REQUESTS -->
+        <h3>⏳ Pending Requests ({{ pending.count }})</h3>
+        {% if pending %}
+        <table>
+            <thead>
+                <tr>
+                    <th>SI.NO</th>
+                    <th>Volunteer Name</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Bank Details</th>
+                    <!-- <th>Description</th> -->
+                    <th>Bill/Receipt</th>
+                    <th>Request Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in pending %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ request.volunteer_id.volunteer_name }}</td>
+                    <td class="amount">₹ {{ request.expense_amount }}</td>
+                    <td>{{ request.expense_purpose }}</td>
+                    <td class="description" style="font-size: 12px; color: #6b7280;">{{ request.bank_details|default:"—"|linebreaks }}</td>
+                    <!-- <td class="description">{{ request.expense_description|default:"—" }}</td> -->
+                    <td>
+                        {% if request.expense_bill %}
+                            <a class="bill-link" onclick="openBillModal('{{ request.expense_bill.url }}', '{{ request.id }}')">📄 View Bill</a>
+                        {% else %}
+                            <span style="color: #9ca3af;">No Bill</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ request.expense_date }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-approve" onclick="openModal('approve', {{ request.id }})">Approve</button>
+                            <button class="btn-action btn-reject" onclick="openModal('reject', {{ request.id }})">Reject</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-data">No pending requests</div>
+        {% endif %}
+
+        <!-- APPROVED REQUESTS -->
+        <h3>✓ Approved Requests ({{ approved.count }})</h3>
+        {% if approved %}
+        <table>
+            <thead>
+                <tr>
+                    <th>SI.NO</th>
+                    <th>Volunteer Name</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Bank Details</th>
+                    <th>Bill/Receipt</th>
+                    <th>Request Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in approved %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ request.volunteer_id.volunteer_name }}</td>
+                    <td class="amount">₹ {{ request.expense_amount }}</td>
+                    <td>{{ request.expense_purpose }}</td>
+                    <td class="description" style="font-size: 12px; color: #6b7280;">{{ request.bank_details|default:"—"|linebreaks }}</td>
+                    <td>
+                        {% if request.expense_bill %}
+                            <a class="bill-link" onclick="openBillModal('{{ request.expense_bill.url }}', '{{ request.id }}')">📄 View Bill</a>
+                        {% else %}
+                            <span style="color: #9ca3af;">No Bill</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ request.expense_date }}</td>
+                    <td>
+                        <form method="post" action="{% url 'Admin:PayExpenseRequest' request.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-action btn-pay">Pay Now</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-data">No approved requests</div>
+        {% endif %}
+
+        <!-- PAID REQUESTS -->
+        <h3>💰 Paid Requests ({{ paid.count }})</h3>
+        {% if paid %}
+        <table>
+            <thead>
+                <tr>
+                    <th>SI.NO</th>
+                    <th>Volunteer Name</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Bank Details</th>
+                    <th>Paid Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in paid %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ request.volunteer_id.volunteer_name }}</td>
+                    <td class="amount">₹ {{ request.expense_amount }}</td>
+                    <td>{{ request.expense_purpose }}</td>
+                    <td class="description" style="font-size: 12px; color: #6b7280;">{{ request.bank_details|default:"—"|linebreaks }}</td>
+                    <td>{{ request.paid_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-data">No paid requests</div>
+        {% endif %}
+
+        <!-- REJECTED REQUESTS -->
+        <h3>✗ Rejected Requests ({{ rejected.count }})</h3>
+        {% if rejected %}
+        <table>
+            <thead>
+                <tr>
+                    <th>SI.NO</th>
+                    <th>Volunteer Name</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Bank Details</th>
+                    <th>Rejection Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in rejected %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ request.volunteer_id.volunteer_name }}</td>
+                    <td class="amount">₹ {{ request.expense_amount }}</td>
+                    <td>{{ request.expense_purpose }}</td>
+                    <td class="description" style="font-size: 12px; color: #6b7280;">{{ request.bank_details|default:"—"|linebreaks }}</td>
+                    <td>{{ request.admin_remark|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-data">No rejected requests</div>
+        {% endif %}
+    </div>
+
+    <!-- MODAL FOR ACTIONS -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header" id="modalTitle"></div>
+            <form id="actionForm" method="post">
+                {% csrf_token %}
+                <label for="txt_remark">Remark (Optional):</label>
+                <textarea name="txt_remark" id="txt_remark" placeholder="Enter your remark..."></textarea>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- BILL VIEWER MODAL -->
+    <div id="billModal" class="bill-modal">
+        <div class="bill-modal-content">
+            <div class="bill-modal-header">
+                <h3>📄 Bill Preview</h3>
+                <button type="button" class="bill-close-btn" onclick="closeBillModal()">&times;</button>
+            </div>
+            <div class="bill-modal-body">
+                <div class="bill-viewer-container" id="billViewer"></div>
+                <a id="billDownloadBtn" class="bill-download-btn" href="#" download>⬇️ Download Bill</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAction = '';
+        let currentRequestId = '';
+
+        function openModal(action, requestId) {
+            currentAction = action;
+            currentRequestId = requestId;
+
+            // Set form action based on action type
+            const form = document.getElementById('actionForm');
+            if (action === 'approve') {
+                form.action = "{% url 'Admin:ApproveExpense' 0 %}".replace('0', requestId);
+                document.getElementById('modalTitle').textContent = 'Approve Expense Request';
+            } else if (action === 'reject') {
+                form.action = "{% url 'Admin:RejectExpense' 0 %}".replace('0', requestId);
+                document.getElementById('modalTitle').textContent = 'Reject Expense Request';
+            }
+
+            document.getElementById('actionModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('actionModal').style.display = 'none';
+            document.getElementById('txt_remark').value = '';
+        }
+
+        function openBillModal(billUrl, requestId) {
+            const billViewer = document.getElementById('billViewer');
+            const billDownloadBtn = document.getElementById('billDownloadBtn');
+            const fileExtension = billUrl.split('.').pop().toLowerCase();
+
+            // Clear previous content
+            billViewer.innerHTML = '';
+
+            // Display based on file type
+            if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+                // Image files
+                const img = document.createElement('img');
+                img.src = billUrl;
+                img.onerror = () => {
+                    billViewer.innerHTML = '<p style="color: #ef4444;">Failed to load image. <a href="' + billUrl + '" target="_blank" class="bill-link">Click here to download</a></p>';
+                };
+                billViewer.appendChild(img);
+            } else if (fileExtension === 'pdf') {
+                // PDF files
+                const embed = document.createElement('embed');
+                embed.src = billUrl;
+                embed.type = 'application/pdf';
+                billViewer.appendChild(embed);
+            } else {
+                // Other file types - try to embed or provide download
+                billViewer.innerHTML = '<p style="color: #6b7280; padding: 20px;">File type cannot be previewed. Please download to view.</p>';
+            }
+
+            // Set download button
+            billDownloadBtn.href = billUrl;
+            billDownloadBtn.download = true;
+
+            // Show modal
+            document.getElementById('billModal').style.display = 'block';
+        }
+
+        function closeBillModal() {
+            document.getElementById('billModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const actionModal = document.getElementById('actionModal');
+            const billModal = document.getElementById('billModal');
+            
+            if (event.target == actionModal) {
+                actionModal.style.display = 'none';
+            }
+            if (event.target == billModal) {
+                billModal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+
+{% endblock %}

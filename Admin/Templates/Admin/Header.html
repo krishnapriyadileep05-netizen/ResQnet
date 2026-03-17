@@ -111,6 +111,9 @@
         <li class="nxl-item">
             <a class="nxl-link" href="{% url 'Admin:DonationRequest' %}">Donation Request</a>
         </li>
+        <li class="nxl-item">
+            <a class="nxl-link" href="{% url 'Admin:ViewExpenseRequests' %}">Expense Requests</a>
+        </li>
     </ul>
 </li>
 
@@ -143,6 +146,12 @@
     <a href="{% url 'Admin:ViewComplaint' %}" class="nxl-link">
         <span class="nxl-micon"><i class="feather-alert-circle"></i></span>
         <span class="nxl-mtext">View Complaint</span>
+    </a>
+</li>
+<li class="nxl-item">
+    <a href="{% url 'Admin:ViewFeedback' %}" class="nxl-link">
+        <span class="nxl-micon"><i class="feather-alert-circle"></i></span>
+        <span class="nxl-mtext">View Feedback</span>
     </a>
 </li>
 

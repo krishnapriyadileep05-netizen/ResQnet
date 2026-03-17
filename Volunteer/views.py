@@ -73,14 +73,25 @@ def ChangePassword(request):
 
 
 def viewrequest(request):
+    """
+    View all Emergency/Volunteer Help requests available for volunteers to join.
+    
+    IMPORTANT SECURITY FILTERING:
+    - Only requests with request_type=1 (Emergency/Volunteer Help) are shown to volunteers
+    - Donation requests (request_type=0) are NOT displayed to volunteers
+    - Volunteers can ONLY join Emergency/Volunteer Help requests
+    - Donation requests are managed separately and not volunteer-based
+    """
     if "vid" not in request.session:
         return redirect("Guest:Login")
 
     volunteer = tbl_volunteer.objects.get(id=request.session["vid"])
     today = date.today()
+    # Filter: Only show Emergency/Volunteer Help requests (request_type=1)
+    # Donation requests (request_type=0) are excluded
     requests = tbl_request.objects.filter(
         request_status=1,
-        request_type=1
+        request_type=1  # 1 = Emergency/Volunteer Help (only this type)
     )
     requestdata = []
     print(requests)
@@ -338,3 +349,75 @@ def Team(request):
 def delteam(request, id):
     tbl_team.objects.filter(id=id).delete()
     return redirect("Volunteer:Team")
+
+
+def AssignCollectionMembers(request, cid):
+    if "vid" not in request.session:
+        return redirect("Guest:Login")
+
+    collection = tbl_collectionrequest.objects.get(id=cid)
+    volunteer = tbl_volunteer.objects.get(id=request.session["vid"])
+
+    teamdata = tbl_team.objects.filter(volunteer_id=volunteer)
+    assigned = tbl_collectionmember.objects.filter(collection_id=collection)
+
+    if request.method == "POST":
+        member_ids = request.POST.getlist("team_id")
+
+        for mid in member_ids:
+            team = tbl_team.objects.get(id=mid)
+
+            if not tbl_collectionmember.objects.filter(
+                collection_id=collection, team_id=team
+            ).exists():
+                tbl_collectionmember.objects.create(
+                    collection_id=collection,
+                    team_id=team
+                )
+
+        return redirect("Volunteer:MyCollectionRequest")
+
+    return render(request, "Volunteer/AssignCollectionMembers.html", {
+        "teamdata": teamdata,
+        "assigned": assigned,
+        "collection": collection
+    })
+
+
+# ================ EXPENSE REQUEST ================
+def CreateExpenseRequest(request):
+    if "vid" not in request.session:
+        return redirect("Guest:Login")
+
+    volunteer = tbl_volunteer.objects.get(id=request.session["vid"])
+
+    if request.method == "POST":
+        amount = request.POST.get("txt_amount")
+        purpose = request.POST.get("txt_purpose")
+        description = request.POST.get("txt_description", "")
+        bank_details = request.POST.get("txt_bank_details", "")
+        bill_file = request.FILES.get("file_bill")
+
+        tbl_volunteer_expense_request.objects.create(
+            volunteer_id=volunteer,
+            expense_amount=amount,
+            expense_purpose=purpose,
+            expense_description=description,
+            bank_details=bank_details,
+            expense_bill=bill_file
+        )
+        return render(request, "Volunteer/ExpenseRequest.html", {"msg": "Expense request submitted successfully"})
+
+    return render(request, "Volunteer/ExpenseRequest.html")
+
+
+def ViewMyExpenseRequests(request):
+    if "vid" not in request.session:
+        return redirect("Guest:Login")
+
+    volunteer = tbl_volunteer.objects.get(id=request.session["vid"])
+    expense_requests = tbl_volunteer_expense_request.objects.filter(volunteer_id=volunteer).order_by('-expense_date')
+
+    return render(request, "Volunteer/MyExpenseRequests.html", {
+        "expense_requests": expense_requests
+    })

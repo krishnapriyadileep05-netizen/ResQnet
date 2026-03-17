@@ -1,0 +1,201 @@
+{% extends 'Volunteer/Header.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Expense Requests</title>
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background-color: #f3eadaa1;
+            padding: 30px;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-create {
+            background-color: #e39c7d;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .btn-create:hover {
+            background-color: #d17b58;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        td {
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+            transition: background 0.2s ease;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status-approved {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status-paid {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .amount {
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .remark {
+            font-size: 12px;
+            color: #6b7280;
+            max-width: 150px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>My Expense Requests</h2>
+
+        <div class="action-buttons">
+            <a href="{% url 'Volunteer:CreateExpenseRequest' %}" class="btn-create">+ New Expense Request</a>
+        </div>
+
+        {% if expense_requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>SI.NO</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Bank Details</th>
+                    
+                    <th>Bill/Receipt</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Paid Date</th>
+                    <th>Admin Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in expense_requests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="amount">₹ {{ request.expense_amount }}</td>
+                    <td>{{ request.expense_purpose }}</td>
+                    <td>{{ request.expense_description|truncatewords:10 }}</td>
+                    <td>
+                        {% if request.expense_bill %}
+                            <a href="{{ request.expense_bill.url }}" target="_blank" style="color: #3b82f6; text-decoration: underline; font-weight: 500;">📄 Download</a>
+                        {% else %}
+                            <span style="color: #9ca3af;">—</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ request.expense_date }}</td>
+                    <td>
+                        {% if request.expense_status == 0 %}
+                            <span class="status-pending">⏳ Pending</span>
+                        {% elif request.expense_status == 1 %}
+                            <span class="status-approved">✓ Approved</span>
+                        {% elif request.expense_status == 2 %}
+                            <span class="status-rejected">✗ Rejected</span>
+                        {% elif request.expense_status == 3 %}
+                            <span class="status-paid">💰 Paid</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ request.paid_date|default:"—" }}</td>
+                    <td class="remark">{{ request.admin_remark|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-data">
+            <p>No expense requests found</p>
+            <a href="{% url 'Volunteer:CreateExpenseRequest' %}" class="btn-create">Create Your First Request</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% endblock %}

@@ -95,7 +95,7 @@
                 <a href="{% url 'Volunteer:TakeRequest' r.id %}">Take Request</a>
             {% elif r.status == 1 %}
                 <strong>Request Accepted</strong>
-                <a href="{% url 'Volunteer:AssignMembers' r.id %}">Assign Members</a>
+               <a href="{% url 'Volunteer:AssignCollectionMembers' r.id %}">Assign Members </a>
                 
             {% else %}
                 <span>Closed</span>

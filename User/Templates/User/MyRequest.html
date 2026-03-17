@@ -148,13 +148,14 @@ td[colspan="11"] {
             {% endif %}
         </td>
 
-        <td>
-            {% if i.request_status == 1 %}
-                <a href="{% url 'User:ViewMembers' i.id %}">View Volunteers</a>
-            {% else %}
-                N/A
-            {% endif %}
-        </td>
+       <td>
+    {% if i.request_status == 1 %}
+        <a href="{% url 'User:ViewMembers' i.id %}">View Volunteers</a> |
+        <a href="{% url 'User:CancelRequest' i.id %}" onclick="return confirm('Are you sure you want to delete this request?')">Cancel</a>
+    {% else %}
+        N/A
+    {% endif %}
+</td>
     </tr>
 
     {% empty %}

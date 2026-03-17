@@ -52,7 +52,45 @@ def HomePage(request):
     if "aid" not in request.session:
         return redirect("Guest:Login")
     else:
-        return render(request,"Admin/HomePage.html")
+        # Get overall statistics
+        total_users = tbl_user.objects.all().count()
+        total_volunteers = tbl_volunteer.objects.filter(volunteer_status=1).count()
+        total_requests = tbl_request.objects.all().count()
+        pending_requests = tbl_request.objects.filter(request_status=0).count()
+        total_donations = tbl_donation.objects.all().count()
+        total_complaints = tbl_complaint.objects.all().count()
+        total_camps = tbl_camp.objects.all().count()
+        
+        # Get donation statistics
+        total_donation_amount = tbl_donation.objects.aggregate(Sum('donation_amount'))['donation_amount__sum'] or 0
+        
+        # Recent requests (last 5)
+        recent_requests = tbl_request.objects.all().order_by('-request_date')[:5]
+        
+        # Recent complaints (last 5)
+        recent_complaints = tbl_complaint.objects.all().order_by('-complaint_date')[:5]
+        
+        # Recent donations (last 5)
+        recent_donations = tbl_donation.objects.all().order_by('-donation_date')[:5]
+        
+        # Pending volunteers
+        pending_volunteers = tbl_volunteer.objects.filter(volunteer_status=0).count()
+        
+        context = {
+            'total_users': total_users,
+            'total_volunteers': total_volunteers,
+            'total_requests': total_requests,
+            'pending_requests': pending_requests,
+            'total_donations': total_donations,
+            'total_complaints': total_complaints,
+            'total_camps': total_camps,
+            'total_donation_amount': total_donation_amount,
+            'recent_requests': recent_requests,
+            'recent_complaints': recent_complaints,
+            'recent_donations': recent_donations,
+            'pending_volunteers': pending_volunteers,
+        }
+        return render(request,"Admin/HomePage.html", context)
 
 def District(request):
     if "aid" not in request.session:
@@ -221,12 +259,27 @@ def rejectvolunteer(request,id):
     vdata.save()
     return redirect("Admin:VolunteerList")
 
+
+
 def viewrequest(request):
+    """
+    Admin view for ALL user requests (both Donation and Emergency/Volunteer Help types).
+    
+    Shows:
+    - Pending requests: Awaiting admin review
+    - Accepted requests: Approved by admin, volunteers can join (if type=1)
+    - Rejected requests: Declined by admin
+    
+    Features:
+    - Highlights urgent requests (deadline within 3 days)
+    - Highlights expired requests (deadline passed)
+    - Shows volunteer response count for accepted requests
+    - Displays request type (Emergency or Donation)
+    """
     if "aid" not in request.session:
         return redirect("Guest:Login")
 
     today = date.today()
-    upcoming_days = today + timedelta(days=3)
 
     pending_raw = tbl_request.objects.filter(request_status=0)
     accept_raw = tbl_request.objects.filter(request_status=1)
@@ -234,18 +287,34 @@ def viewrequest(request):
 
     pending = []
     for r in pending_raw:
-        if r.request_todate >= today:
-            r.is_important = today <= r.request_todate <= upcoming_days
-            pending.append(r)
+        days_left = (r.request_todate - today).days
+
+        # 🔴 Expired
+        if days_left < 0:
+            r.is_expired = True
+            r.is_important = False
+
+        # 🟡 Within 3 days
+        elif days_left <= 3:
+            r.is_important = True
+            r.is_expired = False
+
+        # ⚪ Normal
+        else:
+            r.is_important = False
+            r.is_expired = False
+
+        pending.append(r)
 
     accept = []
     for r in accept_raw:
-        if r.request_todate >= today:
-            r.is_important = today <= r.request_todate <= upcoming_days
+        days_left = (r.request_todate - today).days
 
-            r.response_count = tbl_response.objects.filter(request_id=r).count()
+        r.is_important = days_left <= 3 and days_left >= 0
+        r.is_expired = days_left < 0
 
-            accept.append(r)
+        r.response_count = tbl_response.objects.filter(request_id=r).count()
+        accept.append(r)
 
     return render(request, 'Admin/ViewRequest.html', {
         "pending": pending,
@@ -300,16 +369,20 @@ def Camp(request):
         else:
             return render(request,'Admin/Camp.html',{'district':district,'place':place,'camp':campdata})
             
-def Start(request,id):
-    sdata=tbl_camp.objects.get(id=id)
-    sdata.camp_status=1
+def Start(request, id):
+    sdata = tbl_camp.objects.get(id=id)
+    sdata.camp_status = 1   # force start
     sdata.save()
     return redirect('Admin:Camp')
-
-def End(request,id):
-    edata=tbl_camp.objects.get(id=id)
-    edata.camp_status=2
-    edata.save()
+    
+    return redirect('Admin:Camp')
+def End(request, id):
+    edata = tbl_camp.objects.get(id=id)
+    
+    if edata.camp_status == 1:   # only if started
+        edata.camp_status = 2
+        edata.save()
+    
     return redirect('Admin:Camp')
 
 def AssignVolunteer(request,id):
@@ -338,6 +411,118 @@ def DonationRequest(request):
         'district':district,
         'requestdata':requestdata
     })
+
+
+def DonationReport(request):
+    if "aid" not in request.session:
+        return redirect("Guest:Login")
+
+    payments = tbl_payment.objects.all()
+    # Get only paid expense requests
+    paid_expenses = tbl_volunteer_expense_request.objects.filter(expense_status=3)
+
+    # Total donation
+    total_amount = sum(int(p.payment_amount) for p in payments)
+
+    # Total used (only paid expenses)
+    total_used = sum(e.expense_amount for e in paid_expenses)
+
+    # Balance
+    balance = total_amount - total_used
+
+    # Today collection
+    today = date.today()
+    today_amount = sum(int(p.payment_amount) for p in payments if p.payment_date == today)
+
+    return render(request, "Admin/DonationReport.html", {
+        "paymentdata": payments,
+        "paid_expenses": paid_expenses,
+        "total_amount": total_amount,
+        "today_amount": today_amount,
+        "total_used": total_used,
+        "balance": balance
+    })
+
+
+def ViewVolunteerExpenseRequests(request):
+    if "aid" not in request.session:
+        return redirect("Guest:Login")
+
+    pending = tbl_volunteer_expense_request.objects.filter(expense_status=0)
+    approved = tbl_volunteer_expense_request.objects.filter(expense_status=1)
+    paid = tbl_volunteer_expense_request.objects.filter(expense_status=3)
+    rejected = tbl_volunteer_expense_request.objects.filter(expense_status=2)
+
+    return render(request, "Admin/ViewExpenseRequests.html", {
+        "pending": pending,
+        "approved": approved,
+        "paid": paid,
+        "rejected": rejected
+    })
+
+
+def ApproveExpenseRequest(request, id):
+    if request.method == "POST":
+        expense = tbl_volunteer_expense_request.objects.get(id=id)
+        expense.expense_status = 1  # Approved
+        expense.admin_remark = request.POST.get("txt_remark", "")
+        expense.save()
+    return redirect('Admin:ViewExpenseRequests')
+
+
+def RejectExpenseRequest(request, id):
+    if request.method == "POST":
+        expense = tbl_volunteer_expense_request.objects.get(id=id)
+        expense.expense_status = 2  # Rejected
+        expense.admin_remark = request.POST.get("txt_remark", "")
+        expense.save()
+    return redirect('Admin:ViewExpenseRequests')
+
+
+def PayExpenseRequestPage(request, id):
+    if "aid" not in request.session:
+        return redirect("Guest:Login")
+
+    expense = tbl_volunteer_expense_request.objects.get(id=id)
+    
+    if request.method == "POST":
+        # Store payment data in session
+        request.session["expense_payment"] = {
+            "expense_id": expense.id,
+            "volunteer_name": expense.volunteer_id.volunteer_name,
+            "amount": expense.expense_amount,
+            "purpose": expense.expense_purpose,
+            "volunteer_id": expense.volunteer_id.id
+        }
+        return redirect('Admin:PaymentProcessing')
+
+    return render(request, "Admin/ExpensePayment.html", {"expense": expense})
+
+
+def PaymentProcessing(request):
+    if "aid" not in request.session:
+        return redirect("Guest:Login")
+    
+    payment_data = request.session.get("expense_payment")
+    return render(request, "Admin/PaymentProcessing.html", {"payment": payment_data})
+
+
+def CompleteExpensePayment(request):
+    if "aid" not in request.session:
+        return redirect("Guest:Login")
+
+    payment_data = request.session.get("expense_payment")
+    
+    if payment_data:
+        expense = tbl_volunteer_expense_request.objects.get(id=payment_data["expense_id"])
+        expense.expense_status = 3  # Paid
+        expense.paid_date = date.today()
+        expense.save()
+        
+        del request.session["expense_payment"]
+        return render(request, "Admin/PaymentSuccess.html", {"expense": expense})
+
+    return redirect('Admin:ViewExpenseRequests')
 
 
 def AddItem(request, id):
@@ -419,6 +604,10 @@ def Reply(request,id):
     else:
         return render(request,'Admin/Reply.html',{'complaintdata':complaintdata,'userdata':userdata})
     
+def ViewFeedback(request):
+    feedbackdata=tbl_feedback.objects.all()
+    return render(request,'Admin/ViewFeedback.html',{'feedbackdata':feedbackdata})
+    
 def SendSelectedCollection(request):
     if request.method == "POST":
         ids = request.POST.getlist("donation_ids")
@@ -470,29 +659,29 @@ def ViewMembers(request, rid):
 
 
 
-def DonationReport(request):
-    if "aid" not in request.session:
-        return redirect("Guest:Login")
+# def DonationReport(request):
+#     if "aid" not in request.session:
+#         return redirect("Guest:Login")
 
-    today = date.today()
+#     today = date.today()
 
-    total_amount = tbl_payment.objects.aggregate(
-        total=Sum('payment_amount')
-    )['total'] or 0
+#     total_amount = tbl_payment.objects.aggregate(
+#         total=Sum('payment_amount')
+#     )['total'] or 0
 
-    today_amount = tbl_payment.objects.filter(
-        payment_date=today
-    ).aggregate(
-        total=Sum('payment_amount')
-    )['total'] or 0
+#     today_amount = tbl_payment.objects.filter(
+#         payment_date=today
+#     ).aggregate(
+#         total=Sum('payment_amount')
+#     )['total'] or 0
 
-    paymentdata = tbl_payment.objects.all().order_by('-payment_date')
+#     paymentdata = tbl_payment.objects.all().order_by('-payment_date')
 
-    return render(request, "Admin/DonationReport.html", {
-        "total_amount": total_amount,
-        "today_amount": today_amount,
-        "paymentdata": paymentdata
-    })
+#     return render(request, "Admin/DonationReport.html", {
+#         "total_amount": total_amount,
+#         "today_amount": today_amount,
+#         "paymentdata": paymentdata
+#     })
 
 def Awareness(request):
     if "aid" not in request.session:

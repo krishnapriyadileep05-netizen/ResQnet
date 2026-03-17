@@ -24,8 +24,16 @@
             color: white;
         }
 
+        /* 🟡 Important (≤ 3 days) */
         .important {
             background-color: #ffeb99;
+            font-weight: bold;
+        }
+
+        /* 🔴 Expired */
+        .expired {
+            background-color: #f8d7da;
+            color: #721c24;
             font-weight: bold;
         }
 
@@ -63,11 +71,16 @@
         <th>Type</th>
         <th>Date</th>
         <th>To Date</th>
+        <th>Status</th>
         <th>Action</th>
     </tr>
 
     {% for i in pending %}
-    <tr {% if i.request_type == 1 %}class="important"{% endif %}>
+    <tr class="
+        {% if i.is_expired %}expired
+        {% elif i.is_important %}important
+        {% endif %}
+    ">
         <td>{{ forloop.counter }}</td>
         <td>{{ i.request_title }}</td>
         <td>{{ i.request_content }}</td>
@@ -76,6 +89,17 @@
         <td>{% if i.request_type == 1 %}Emergency{% else %}Donation{% endif %}</td>
         <td>{{ i.request_date }}</td>
         <td>{{ i.request_todate }}</td>
+
+        <td>
+            {% if i.is_expired %}
+                Expired
+            {% elif i.is_important %}
+                Urgent
+            {% else %}
+                Normal
+            {% endif %}
+        </td>
+
         <td>
             <a href="#" onclick="openModal('accept', {{ i.id }})">Accept</a> |
             <a href="#" onclick="openModal('reject', {{ i.id }})">Reject</a>
@@ -83,7 +107,7 @@
     </tr>
     {% empty %}
     <tr>
-        <td colspan="9">No Pending Requests</td>
+        <td colspan="10">No Pending Requests</td>
     </tr>
     {% endfor %}
 </table>
@@ -100,11 +124,16 @@
         <th>Place</th>
         <th>Date</th>
         <th>To Date</th>
+        <th>Status</th>
         <th>Action</th>
     </tr>
 
     {% for i in accept %}
-    <tr {% if i.is_important %}class="important"{% endif %}>
+    <tr class="
+        {% if i.is_expired %}expired
+        {% elif i.is_important %}important
+        {% endif %}
+    ">
         <td>{{ forloop.counter }}</td>
         <td>{{ i.request_title }}</td>
         <td>{{ i.request_content }}</td>
@@ -112,6 +141,17 @@
         <td>{{ i.place_id.place_name }}</td>
         <td>{{ i.request_date }}</td>
         <td>{{ i.request_todate }}</td>
+
+        <td>
+            {% if i.is_expired %}
+                Expired
+            {% elif i.is_important %}
+                Urgent
+            {% else %}
+                Normal
+            {% endif %}
+        </td>
+
         <td>
             <a href="{% url 'Admin:ViewResponse' i.id %}">
                 View Response ({{ i.response_count }})
@@ -121,7 +161,7 @@
     </tr>
     {% empty %}
     <tr>
-        <td colspan="8">No Accepted Requests</td>
+        <td colspan="9">No Accepted Requests</td>
     </tr>
     {% endfor %}
 </table>
@@ -141,7 +181,7 @@
     </tr>
 
     {% for i in reject %}
-    <tr {% if i.request_type == 1 %}class="important"{% endif %}>
+    <tr>
         <td>{{ forloop.counter }}</td>
         <td>{{ i.request_title }}</td>
         <td>{{ i.request_content }}</td>
@@ -195,4 +235,5 @@ function closeModal() {
 
 </body>
 </html>
+
 {% endblock %}

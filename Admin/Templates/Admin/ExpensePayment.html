@@ -1,0 +1,377 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #2563eb;
+            --accent: #60a5fa;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .payment-side {
+            flex: 1;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-side::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+        }
+
+        .payment-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .payment-form {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payment-header h2 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .payment-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .amount-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .amount-box .label {
+            color: #92400e;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .amount-box .amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: #d97706;
+            margin: 10px 0;
+        }
+
+        .amount-box .note {
+            font-size: 12px;
+            color: #92400e;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+            background-color: white;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .volunteer-info {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .info-row .label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .info-row .value {
+            color: #6b7280;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .secured {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .secured i {
+            color: var(--success);
+            margin-right: 5px;
+        }
+
+        .bill-section {
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .bill-section a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .bill-section a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(10%, 10%); }
+        }
+
+        @media (max-width: 768px) {
+            .payment-container {
+                flex-direction: column;
+            }
+            
+            .payment-side {
+                padding: 30px;
+            }
+            
+            .payment-form {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-side">
+            <div class="payment-icon">💳</div>
+            <div class="cause-info">
+                <h3>Secure Payment</h3>
+                <p>Complete the payment to finalize the expense request. The amount will be deducted from donations.</p>
+                <div style="margin-top: 30px; font-size: 14px;">
+                    <span style="display: block; margin: 10px 0;"><i class="fas fa-lock" style="margin-right: 8px;"></i> SSL Encrypted</span>
+                    <span style="display: block; margin: 10px 0;"><i class="fas fa-shield-alt" style="margin-right: 8px;"></i> PCI Compliant</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-form">
+            <div class="payment-header">
+                <h2>💰 Process Payment</h2>
+                <p>Enter card details to complete the expense payment</p>
+            </div>
+
+            <div class="volunteer-info">
+                <div class="info-row">
+                    <span class="label">Volunteer:</span>
+                    <span class="value">{{ expense.volunteer_id.volunteer_name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Purpose:</span>
+                    <span class="value">{{ expense.expense_purpose }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Description:</span>
+                    <span class="value">{{ expense.expense_description|default:"—" }}</span>
+                </div>
+                {% if expense.bank_details %}
+                <div class="info-row" style="border-top: 1px solid #bfdbfe; padding-top: 12px; margin-top: 12px;">
+                    <span class="label">Bank Details:</span>
+                    <span class="value" style="white-space: pre-wrap; text-align: right;">{{ expense.bank_details }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if expense.expense_bill %}
+            <div class="bill-section">
+                📄 <a href="{{ expense.expense_bill.url }}" target="_blank">View Attached Bill</a>
+            </div>
+            {% endif %}
+
+            <div class="amount-box">
+                <div class="label">PAYMENT AMOUNT</div>
+                <div class="amount">₹ {{ expense.expense_amount }}</div>
+                <div class="note">Deducted from total donations</div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Card Holder Name *</label>
+                    <input type="text" class="form-control" name="card_holder" placeholder="Name on card" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Card Number *</label>
+                    <input type="text" class="form-control" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry Date *</label>
+                        <input type="text" class="form-control" name="expiry_date" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV *</label>
+                        <input type="text" class="form-control" name="cvv" placeholder="123" maxlength="4" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Billing Address *</label>
+                    <input type="text" class="form-control" name="billing_address" placeholder="Enter billing address" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-lock" style="margin-right: 8px;"></i> Pay ₹ {{ expense.expense_amount }}
+                </button>
+
+                <div class="secured">
+                    <i class="fas fa-check-circle"></i> Your payment is 100% secure
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
