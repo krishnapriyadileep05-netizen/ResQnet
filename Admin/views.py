@@ -504,7 +504,15 @@ def PaymentProcessing(request):
         return redirect("Guest:Login")
     
     payment_data = request.session.get("expense_payment")
-    return render(request, "Admin/PaymentProcessing.html", {"payment": payment_data})
+
+    if payment_data:
+        expense = tbl_volunteer_expense_request.objects.get(id=payment_data["expense_id"])
+        return render(request, "Admin/PaymentProcessing.html", {
+            "payment": payment_data,
+            "expense": expense
+        })
+
+    return redirect('Admin:ViewExpenseRequests')
 
 
 def CompleteExpensePayment(request):
